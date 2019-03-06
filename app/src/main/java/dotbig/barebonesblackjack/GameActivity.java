@@ -33,9 +33,13 @@ public class GameActivity extends AppCompatActivity {
         hitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                hit();
             }
         });
+    }
+
+    private void hit() {
+        
     }
 
 }
