@@ -14,7 +14,7 @@ public class GameActivity extends AppCompatActivity {
 
         configureReturnButton();
 
-
+        configureHitButton();
 
     }
 
@@ -24,6 +24,16 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+    }
+
+    private void configureHitButton() {
+        Button hitButton = findViewById(R.id.buttonHit);
+        hitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
