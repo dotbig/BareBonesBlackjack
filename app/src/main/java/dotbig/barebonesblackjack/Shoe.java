@@ -1,5 +1,6 @@
 package dotbig.barebonesblackjack;
 
-public class Shoe {
-
+interface Shoe {
+    Card draw();
+    Card draw(boolean faceUp);
 }
