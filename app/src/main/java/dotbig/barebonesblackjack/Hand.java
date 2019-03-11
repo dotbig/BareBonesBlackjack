@@ -1,8 +1,8 @@
 package dotbig.barebonesblackjack;
 
 interface Hand {
-    Card hit();
-    Card hit(boolean faceUp);
+    void hit(Card draw);
+    void hit(Card draw, boolean faceUp);
     int value();
     boolean softSeventeen();
     void clear();
