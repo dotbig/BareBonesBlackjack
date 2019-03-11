@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 class PlayHand implements Hand {
-    List<Card> cards;
+    private List<Card> cards;
     int bet;
 
     PlayHand(){
@@ -28,12 +28,26 @@ class PlayHand implements Hand {
         cards.add(draw);
     }
 
+    public Card get(int index){
+        return cards.get(index);
+    }
+
+    public int count(){
+        return cards.size();
+    }
+
     public int value(){
         int aces = numberOfAces();
         int sansAces = valueWithoutAces();
         int value = valueOptimal(aces, sansAces);
 
         return value;
+    }
+
+    public boolean natural(){
+        if (count() == 2 && value() == 21) {
+            return true;
+        } else return false;
     }
 
     public boolean softSeventeen(){
