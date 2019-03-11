@@ -24,6 +24,7 @@ public class GameActivity extends AppCompatActivity {
     private Button placeholderButton;
 
     private Shoe shoe;
+    private int shoeSize = 4;
 
     private List<Hand> playerHands;
     private Hand currentPlayerHand;
@@ -180,7 +181,11 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initialiseShoe(){
-        shoe = new DealingShoe(4);
+        shoe = new DealingShoe();
+        for (int i = 0; i < shoeSize; i++){
+            shoe.addDeck(new StandardDeck());
+        }
+        shoe.shuffle();
     }
     private void initialiseHands(){
         //maybe pass in bet value, taken from user input before calling this method

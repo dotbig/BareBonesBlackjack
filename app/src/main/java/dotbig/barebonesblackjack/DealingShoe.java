@@ -5,21 +5,17 @@ import java.util.Stack;
 
 
 class DealingShoe implements Shoe {
-    Stack<Card> stack = new Stack<Card>();
+    private Stack<Card> stack = new Stack<>();
 
     DealingShoe(){
-        stack.addAll(new StandardDeck().getDeck());
-        Collections.shuffle(stack);
+
     }
 
-    DealingShoe(int numberOfDecks){
-        if (numberOfDecks < 1) {
-            stack.addAll(new StandardDeck().getDeck());
-        } else {
-            for (int i=0; i < numberOfDecks; i++){
-                stack.addAll(new StandardDeck().getDeck());
-            }
-        }
+    public void addDeck(Deck deck){
+        stack.addAll(deck.getDeck());
+    }
+
+    public void shuffle(){
         Collections.shuffle(stack);
     }
 

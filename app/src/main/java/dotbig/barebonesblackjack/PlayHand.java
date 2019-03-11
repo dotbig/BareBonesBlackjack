@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.ArrayList;
 
 class PlayHand implements Hand {
-    private List<Card> cards;
-    int bet;
+    private List<Card> cards = new ArrayList<>();
+    private int bet;
 
     PlayHand(){
-        cards = new ArrayList<>();
+        
     }
 
     PlayHand(int stake){
