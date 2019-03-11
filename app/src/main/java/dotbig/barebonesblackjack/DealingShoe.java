@@ -16,7 +16,7 @@ class DealingShoe implements Shoe {
         if (numberOfDecks < 1) {
             stack.addAll(new StandardDeck().getDeck());
         } else {
-            for (int i=0; i< numberOfDecks; i++){
+            for (int i=0; i < numberOfDecks; i++){
                 stack.addAll(new StandardDeck().getDeck());
             }
         }
