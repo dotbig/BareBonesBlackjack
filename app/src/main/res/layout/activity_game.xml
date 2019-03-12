@@ -109,13 +109,31 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonPlaceHolder"
+                android:id="@+id/buttonBet20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_weight="1"
-                android:text="placeholder" />
+                android:text="20" />
+
+            <Button
+                android:id="@+id/buttonBet50"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:text="50" />
+
+            <Button
+                android:id="@+id/buttonBet100"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_weight="1"
+                android:text="100" />
         </LinearLayout>
 
     </LinearLayout>
@@ -125,9 +143,7 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
         android:text="playerValue"
@@ -188,4 +204,29 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textviewValueDealer" />
+
+    <TextView
+        android:id="@+id/textviewBet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="bet"
+        app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
+        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textviewBank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="bank"
+        app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline" />
 </android.support.constraint.ConstraintLayout>

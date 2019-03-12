@@ -12,7 +12,6 @@ class PlayHand implements Hand {
     }
 
     PlayHand(int stake){
-        cards = new ArrayList<>();
         bet = stake;
     }
 
@@ -28,8 +27,16 @@ class PlayHand implements Hand {
         cards.add(draw);
     }
 
-    public Card get(int index){
+    public Card getCard(int index){
         return cards.get(index);
+    }
+
+    public int getBet(){
+        return bet;
+    }
+
+    public void increaseBet(int amount){
+        bet += amount;
     }
 
     public int count(){
