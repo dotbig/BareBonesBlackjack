@@ -27,7 +27,6 @@ class PlayHand implements Hand {
         cards.add(draw);
     }
 
-<<<<<<< HEAD
     public Card getCard(int index){
         return cards.get(index);
     }
@@ -40,12 +39,6 @@ class PlayHand implements Hand {
         bet += amount;
     }
 
-=======
-    public Card get(int index){
-        return cards.get(index);
-    }
-
->>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
     public int count(){
         return cards.size();
     }
