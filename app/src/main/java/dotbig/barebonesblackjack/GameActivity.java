@@ -21,6 +21,7 @@ public class GameActivity extends AppCompatActivity {
     private Button hitButton;
     private Button stayButton;
     private Button playButton;
+<<<<<<< HEAD
 
     private TextView betDisplay;
     private TextView bankDisplay;
@@ -28,14 +29,20 @@ public class GameActivity extends AppCompatActivity {
     private Button bet50Button;
     private Button bet100Button;
 
+=======
+    private Button placeholderButton;
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
 
     private Shoe shoe;
     private int shoeSize = 4;
 
+<<<<<<< HEAD
     private int bank;
     private int bet;
 
 
+=======
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
     private List<Hand> playerHands;
     private Hand currentPlayerHand;
     private Hand dealerHand;
@@ -48,6 +55,7 @@ public class GameActivity extends AppCompatActivity {
         initialiseTextViews();
         //make sure our buttons do stuff
         configureReturnButton();
+<<<<<<< HEAD
 
         bank = 300;
         bet = 0;
@@ -68,7 +76,27 @@ public class GameActivity extends AppCompatActivity {
 
         updateBankDisplay();
         updateBetDisplay();
+=======
+        configurePlayButton();
+        configureHitButton();
+        configureStayButton();
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
 
+        configurePlaceHolderButton();
+
+        initialiseGame();
+
+    }
+
+    private void initialiseTextViews(){
+        //dealer hand information
+        dealerValueDisplay = findViewById(R.id.textviewValueDealer);
+        dealerHandDisplay = findViewById(R.id.textviewHandDealer);
+        //player hand information
+        playerValueDisplay = findViewById(R.id.textviewValuePlayer);
+        playerHandDisplay = findViewById(R.id.textviewHandPlayer);
+        //result of the game
+        gameResult = findViewById(R.id.textviewResult);
     }
 
     private void initialiseTextViews(){
@@ -100,6 +128,10 @@ public class GameActivity extends AppCompatActivity {
         playerHandDisplay.setText(currentHand.toString());
         playerValueDisplay.setText(Integer.toString(currentHand.value()));
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
     private void updateDealerInformation(Hand hand){
         dealerHandDisplay.setText(hand.toString());
         dealerValueDisplay.setText(Integer.toString(hand.value()));
@@ -120,7 +152,11 @@ public class GameActivity extends AppCompatActivity {
         int newValue = hand.value();
         if (newValue == -1){
             gameResult.setText("Bust!");
+<<<<<<< HEAD
             lose(hand);
+=======
+            bust(hand);
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
         } else if (newValue == 21){
             stay();
         }
@@ -135,6 +171,7 @@ public class GameActivity extends AppCompatActivity {
         updateDealerInformation(hand);
     }
 
+<<<<<<< HEAD
     private void lose(Hand currentHand){
         clickableGameButtons(false);
         //TODO: remove currentHand from playerHands
@@ -160,6 +197,17 @@ public class GameActivity extends AppCompatActivity {
         increaseBank(total);
         updateBankDisplay();
         finishGame();
+=======
+    private void bust(Hand currentHand){
+        //disable hit and stay buttons
+        //pay out nothing
+    }
+
+    private void win(Hand currentHand, boolean blackjack){
+        //disable hit and stay buttons
+        //if blackjack, pay bet*1.5
+        //else pay bet
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
     }
 
     private void configureStayButton(){
@@ -168,6 +216,7 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 stay();
+<<<<<<< HEAD
             }
         });
     }
@@ -371,6 +420,112 @@ public class GameActivity extends AppCompatActivity {
                 increaseBet(100);
             }
         });
+=======
+            }
+        });
+    }
+    private void stay(){
+        dealerHand.get(0).flip(true);
+        dealerHandDisplay.setText(dealerHand.toString());
+
+        while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()){
+            hitDealer(dealerHand);
+            dealerHandDisplay.setText(dealerHand.toString());
+            dealerValueDisplay.setText(Integer.toString(dealerHand.value()));
+        }
+        evaluateResult();
+>>>>>>> bbc35aa727ec622c11115a9e362a92c0a1463894
     }
 
+    private void evaluateResult(){
+        int dealerValue = dealerHand.value();
+        int playerValue = currentPlayerHand.value();
+        boolean dealerNatural = dealerHand.natural();
+        boolean playerNatural = currentPlayerHand.natural();
+
+        if (dealerValue == -1){
+            gameResult.setText("Dealer bust!");
+        } else if (dealerValue == playerValue){
+            if (dealerNatural) {
+                if (playerNatural){
+                    gameResult.setText("Natural push");
+                } else {
+                    gameResult.setText("Dealer natural wins");
+                }
+            } else if (playerNatural){
+                gameResult.setText("Player natural wins");
+            } else {
+                gameResult.setText("Push");
+            }
+        } else if (dealerValue == 21){
+            gameResult.setText("Dealer Blackjack");
+        } else if (dealerValue < playerValue){
+            gameResult.setText("Player wins!");
+        } else if (dealerValue > playerValue){
+            gameResult.setText("Dealer wins!");
+        }
+    }
+
+    private void initialiseGame(){
+        initialiseShoe();
+        initialiseHands();
+        //probably get player bet here, or before initialisehands
+        deal();
+        updatePlayerInformation(currentPlayerHand);
+        updateDealerInformation(dealerHand);
+    }
+
+    private void initialiseShoe(){
+        shoe = new DealingShoe();
+        for (int i = 0; i < shoeSize; i++){
+            shoe.addDeck(new StandardDeck());
+        }
+        shoe.shuffle();
+    }
+    private void initialiseHands(){
+        //maybe pass in bet value, taken from user input before calling this method
+        dealerHand = new PlayHand();
+
+        playerHands = new ArrayList<>();
+        Hand newHand = new PlayHand();
+        playerHands.add(newHand);
+        currentPlayerHand = playerHands.get(0);
+    }
+    private void deal(){
+        hitDealer(dealerHand);
+        hitPlayer(currentPlayerHand);
+        hitDealer(dealerHand);
+        hitPlayer(currentPlayerHand);
+    }
+
+    private void configurePlayButton(){
+        playButton = findViewById(R.id.buttonPlay);
+        playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                playAgain();
+            }
+        });
+    }
+    private void playAgain(){
+        gameResult.setText("");
+        initialiseHands();
+        deal();
+        updatePlayerInformation(currentPlayerHand);
+        updateDealerInformation(dealerHand);
+    }
+
+    private void clearTable(){
+
+    }
+
+    private void configurePlaceHolderButton(){
+        placeholderButton = findViewById(R.id.buttonPlaceHolder);
+        placeholderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 }
