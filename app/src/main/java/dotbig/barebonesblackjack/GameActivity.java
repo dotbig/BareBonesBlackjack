@@ -34,6 +34,7 @@ public class GameActivity extends AppCompatActivity {
 
     private int bank;
     private int bet;
+    private boolean split;
 
 
     private List<Hand> playerHands;
@@ -59,8 +60,6 @@ public class GameActivity extends AppCompatActivity {
         configureStayButton();
         clickableGameButtons(false);
 
-
-
         configureBetButtons();
         clickableBetButtons(true);
 
@@ -80,7 +79,7 @@ public class GameActivity extends AppCompatActivity {
         playerHandDisplay = findViewById(R.id.textviewHandPlayer);
         //result of the game
         gameResult = findViewById(R.id.textviewResult);
-
+        //displays for current bet and player funds
         betDisplay = findViewById(R.id.textviewBet);
         bankDisplay = findViewById(R.id.textviewBank);
     }
@@ -191,35 +190,29 @@ public class GameActivity extends AppCompatActivity {
         boolean dealerNatural = dealerHand.natural();
         boolean playerNatural = currentPlayerHand.natural();
 
-        if (dealerValue == -1){
+
+
+        if (playerNatural) {
+            if (dealerNatural) {
+                gameResult.setText("Natural push");
+                push(currentPlayerHand);
+            } else {
+                gameResult.setText("Player natural wins");
+                win(currentPlayerHand, true);
+            }
+        } else if (dealerNatural) {
+            gameResult.setText("Dealer natural wins");
+            lose(currentPlayerHand);
+        } else if (dealerValue == -1) {
             gameResult.setText("Dealer bust!");
             win(currentPlayerHand, false);
         } else if (dealerValue == playerValue){
-            if (dealerNatural) {
-                if (playerNatural){
-                    gameResult.setText("Natural push");
-                    push(currentPlayerHand);
-                } else {
-                    gameResult.setText("Dealer natural wins");
-                    lose(currentPlayerHand);
-                }
-            } else if (playerNatural){
-                gameResult.setText("Player natural wins");
-                win(currentPlayerHand, true);
-            } else {
-                gameResult.setText("Push");
-                push(currentPlayerHand);
-            }
-        } else if (dealerValue == 21){
-            gameResult.setText("Dealer Blackjack");
-            lose(currentPlayerHand);
-        } else if (playerValue == 21) {
-            gameResult.setText("Player Blackjack");
-            win(currentPlayerHand, true);
+            gameResult.setText("Push");
+            push(currentPlayerHand);
         } else if (dealerValue < playerValue){
             gameResult.setText("Player wins!");
             win(currentPlayerHand, false);
-        } else if (dealerValue > playerValue){
+        } else {
             gameResult.setText("Dealer wins!");
             lose(currentPlayerHand);
         }
@@ -253,11 +246,11 @@ public class GameActivity extends AppCompatActivity {
         playButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                playAgain();
+                play();
             }
         });
     }
-    private void playAgain(){
+    private void play(){
         gameResult.setText("");
         initialiseHands();
 
@@ -268,6 +261,7 @@ public class GameActivity extends AppCompatActivity {
         clickableGameButtons(true);
 
         deal();
+
         updatePlayerInformation(currentPlayerHand);
         updateDealerInformation(dealerHand);
     }
