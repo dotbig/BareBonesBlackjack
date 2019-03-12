@@ -61,7 +61,7 @@ public class GameActivity extends AppCompatActivity {
         clickableGameButtons(false);
 
         configureBetButtons();
-        clickableBetButtons(true);
+        enableBetButtons();
 
         initialiseShoe();
 
@@ -257,7 +257,7 @@ public class GameActivity extends AppCompatActivity {
         updateBankDisplay();
 
         clickablePlayButton(false);
-        clickableBetButtons(false);
+        disableBetButtons();
         clickableGameButtons(true);
 
         deal();
@@ -285,7 +285,7 @@ public class GameActivity extends AppCompatActivity {
     private void resetBet(){
         bet = 0;
         updateBetDisplay();
-        clickableBetButtons(true);
+        enableBetButtons();
     }
 
     private void finishGame(){
@@ -314,19 +314,47 @@ public class GameActivity extends AppCompatActivity {
         stayButton.setEnabled(enabled);
     }
 
+    private void disableBetButtons(){
+        bet20Button.setEnabled(false);
+        bet50Button.setEnabled(false);
+        bet100Button.setEnabled(false);
+    }
+
+    private void enableBetButtons(){
+        if (bank < 20){
+            gameResult.setText("You broke, son. Go home.");
+            bet20Button.setEnabled(false);
+            bet50Button.setEnabled(false);
+            bet100Button.setEnabled(false);
+        } else {
+            if (bank >= 20) {
+                bet20Button.setEnabled(true);
+            } else bet20Button.setEnabled(false);
+            if (bank >= 50) {
+                bet50Button.setEnabled(true);
+            } else bet50Button.setEnabled(false);
+            if (bank >= 100) {
+                bet100Button.setEnabled(true);
+            } else bet100Button.setEnabled(false);
+        }
+    }
+
     private void clickableBetButtons(boolean enabled){
         if (bank < 20){
             gameResult.setText("You broke, son. Go home.");
+            bet20Button.setEnabled(false);
+            bet50Button.setEnabled(false);
+            bet100Button.setEnabled(false);
         } else {
             if (bank >= 20) {
                 bet20Button.setEnabled(enabled);
-            }
+            } else bet20Button.setEnabled(false);
             if (bank >= 50) {
                 bet50Button.setEnabled(enabled);
-            }
+            } else bet50Button.setEnabled(false);
             if (bank >= 100) {
                 bet100Button.setEnabled(enabled);
-            }
+            } else bet100Button.setEnabled(false);
         }
 
 
