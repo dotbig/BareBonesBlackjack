@@ -1,9 +1,10 @@
 package dotbig.barebonesblackjack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class StandardDeck implements Deck {
-    List<Card> cards;
+    private List<Card> cards = new ArrayList<>();
 
     StandardDeck(){
         populateDeck();
@@ -20,7 +21,6 @@ class StandardDeck implements Deck {
                 cards.add(c);
             }
         }
-
     }
 
 }

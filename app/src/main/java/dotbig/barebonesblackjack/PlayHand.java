@@ -4,15 +4,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 class PlayHand implements Hand {
-    List<Card> cards;
-    int bet;
+    private List<Card> cards = new ArrayList<>();
+    private int bet;
 
     PlayHand(){
-        cards = new ArrayList<>();
+        
     }
 
     PlayHand(int stake){
-        cards = new ArrayList<>();
         bet = stake;
     }
 
@@ -28,12 +27,34 @@ class PlayHand implements Hand {
         cards.add(draw);
     }
 
+    public Card getCard(int index){
+        return cards.get(index);
+    }
+
+    public int getBet(){
+        return bet;
+    }
+
+    public void increaseBet(int amount){
+        bet += amount;
+    }
+
+    public int count(){
+        return cards.size();
+    }
+
     public int value(){
         int aces = numberOfAces();
         int sansAces = valueWithoutAces();
         int value = valueOptimal(aces, sansAces);
 
         return value;
+    }
+
+    public boolean natural(){
+        if (count() == 2 && value() == 21) {
+            return true;
+        } else return false;
     }
 
     public boolean softSeventeen(){
