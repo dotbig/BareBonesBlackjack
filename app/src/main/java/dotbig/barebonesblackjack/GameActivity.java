@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -28,6 +29,12 @@ public class GameActivity extends AppCompatActivity {
     private Button bet50Button;
     private Button bet100Button;
 
+    private LinearLayout betBar;
+    private LinearLayout contextBar;
+    private LinearLayout playBar;
+    private LinearLayout hitStayBar;
+    private LinearLayout currencyBar;
+
 
     private Shoe shoe;
     private int shoeSize = 4;
@@ -47,6 +54,7 @@ public class GameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_game);
         //initialise textviews
         initialiseTextViews();
+        assignLinearLayouts();
         //make sure our buttons do stuff
         configureReturnButton();
 
@@ -134,12 +142,12 @@ public class GameActivity extends AppCompatActivity {
         updateDealerInformation(hand);
     }
 
+    //lose, push and win are called by evaluateResult() when the player stays
     private void lose(Hand currentHand){
         clickableGameButtons(false);
         //TODO: remove currentHand from playerHands
         finishGame();
     }
-
     private void push(Hand currentHand){
         clickableGameButtons(false);
         int bet = currentHand.getBet();
@@ -147,7 +155,6 @@ public class GameActivity extends AppCompatActivity {
         updateBankDisplay();
         finishGame();
     }
-
     private void win(Hand currentHand, boolean blackjack){
         clickableGameButtons(false);
         int bet = currentHand.getBet();
@@ -189,8 +196,6 @@ public class GameActivity extends AppCompatActivity {
         int playerValue = currentPlayerHand.value();
         boolean dealerNatural = dealerHand.natural();
         boolean playerNatural = currentPlayerHand.natural();
-
-
 
         if (playerNatural) {
             if (dealerNatural) {
@@ -260,14 +265,11 @@ public class GameActivity extends AppCompatActivity {
         disableBetButtons();
         clickableGameButtons(true);
 
+        showGameButtons(true);
         deal();
 
         updatePlayerInformation(currentPlayerHand);
         updateDealerInformation(dealerHand);
-    }
-
-    private void clearTable(){
-
     }
 
     private void increaseBet(int amount){
@@ -290,7 +292,9 @@ public class GameActivity extends AppCompatActivity {
 
     private void finishGame(){
         resetBet();
+        showGameButtons(false);
         clickablePlayButton(false);
+
     }
 
     private void increaseBank(int amount){
@@ -356,8 +360,6 @@ public class GameActivity extends AppCompatActivity {
                 bet100Button.setEnabled(enabled);
             } else bet100Button.setEnabled(false);
         }
-
-
     }
 
     private void clickablePlayButton(boolean enabled){
@@ -366,6 +368,21 @@ public class GameActivity extends AppCompatActivity {
         } else {
             playButton.setEnabled(false);
         }
+    }
+
+    private void showGameButtons(boolean play){
+        if (play){
+            playBar.setVisibility(View.GONE);
+            betBar.setVisibility(View.GONE);
+            hitStayBar.setVisibility(View.VISIBLE);
+            contextBar.setVisibility(View.VISIBLE);
+        } else {
+            playBar.setVisibility(View.VISIBLE);
+            betBar.setVisibility(View.VISIBLE);
+            hitStayBar.setVisibility(View.GONE);
+            contextBar.setVisibility(View.GONE);
+        }
+
     }
 
     private void configureBetButtons(){
@@ -379,14 +396,12 @@ public class GameActivity extends AppCompatActivity {
                 increaseBet(20);
             }
         });
-
         bet50Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 increaseBet(50);
             }
         });
-
         bet100Button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -394,5 +409,15 @@ public class GameActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void assignLinearLayouts(){
+        betBar = findViewById(R.id.horizontalMiddleBets);
+        contextBar = findViewById(R.id.horizontalMiddleContextuals);
+
+        playBar = findViewById(R.id.horizontalTopPlay);
+        hitStayBar = findViewById(R.id.horizontalTopHitStay);
+    }
+
+
 
 }

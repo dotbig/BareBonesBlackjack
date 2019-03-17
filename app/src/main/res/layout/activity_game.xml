@@ -32,30 +32,120 @@
         app:layout_constraintTop_toBottomOf="@+id/textviewHandDealer" />
 
     <LinearLayout
-        android:id="@+id/vertical"
-        android:layout_width="0dp"
-        android:layout_height="150dp"
+        android:id="@+id/horizontalCurrencyBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:weightSum=".9"
+        android:layout_weight=".3"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:id="@+id/horizontalTop"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewBetLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.5"
+                android:text="Current Bet"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/textviewBet"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="0.5"
+                android:text="bet"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintHorizontal_bias="0.505"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewBankLabel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="0.5"
+                android:text="Funds Remaining"
+                android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/textviewBank"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="0.5"
+                android:text="bank"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:weightSum="1"
+        app:layout_constraintBottom_toTopOf="@+id/horizontalCurrencyBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:id="@+id/horizontalTopPlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight=".3"
+            android:layout_weight=".5"
             android:orientation="horizontal"
-            android:weightSum="1"
+            android:visibility="visible">
+
+            <Button
+                android:id="@+id/buttonPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Play" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/horizontalTopHitStay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight=".5"
+            android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -65,55 +155,28 @@
                 android:id="@+id/buttonHit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="Hit" />
 
             <Button
                 android:id="@+id/buttonStay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:text="Stay" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalMid"
+            android:id="@+id/horizontalMiddleBets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight=".3"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonPlay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_weight="1"
-                android:text="Play" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/horizontalBottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight=".3"
+            android:layout_weight=".5"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/buttonBet20"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="20" />
 
@@ -121,8 +184,6 @@
                 android:id="@+id/buttonBet50"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="50" />
 
@@ -130,18 +191,16 @@
                 android:id="@+id/buttonBet100"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_weight="1"
                 android:text="100" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalBottom2"
+            android:id="@+id/horizontalMiddleContextuals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".3"
+            android:layout_weight=".5"
             android:orientation="horizontal"
             android:visibility="gone">
 
@@ -150,28 +209,32 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Double Down"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/buttonSplit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Split"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/buttonInsurance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Insurance"
+                android:textSize="10sp" />
 
             <Button
                 android:id="@+id/buttonSurrender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Surrender"
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -244,28 +307,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textviewValueDealer" />
 
-    <TextView
-        android:id="@+id/textviewBet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="bet"
-        app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
-        app:layout_constraintHorizontal_bias="0.505"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textviewBank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="bank"
-        app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline" />
 </android.support.constraint.ConstraintLayout>
