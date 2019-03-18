@@ -3,6 +3,7 @@ package dotbig.barebonesblackjack;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -10,75 +11,88 @@ import android.widget.TextView;
 import java.util.List;
 import java.util.ArrayList;
 
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity implements OnClickListener {
 
-    //textviews that will display game information
-    private TextView playerHandDisplay;
-    private TextView playerValueDisplay;
-    private TextView dealerHandDisplay;
-    private TextView dealerValueDisplay;
-    private TextView gameResult;
-
+    //butons
+    private Button returnButton;
     private Button hitButton;
     private Button stayButton;
     private Button playButton;
+    private Button betButton1;
+    private Button betButton2;
+    private Button betButton3;
 
-    private TextView betDisplay;
-    private TextView bankDisplay;
-    private Button bet20Button;
-    private Button bet50Button;
-    private Button bet100Button;
+    private Button doubleButton;
+    private Button splitButton;
 
+    //button containers
     private LinearLayout betBar;
     private LinearLayout contextBar;
     private LinearLayout playBar;
     private LinearLayout hitStayBar;
     private LinearLayout currencyBar;
-
+    //information displays
+    private TextView playerHandDisplay;
+    private TextView playerValueDisplay;
+    private TextView dealerHandDisplay;
+    private TextView dealerValueDisplay;
+    private TextView gameResult;
+    private TextView betDisplay;
+    private TextView bankDisplay;
 
     private Shoe shoe;
     private int shoeSize = 4;
 
     private int bank;
     private int bet;
-    private boolean split;
-
 
     private List<Hand> playerHands;
     private Hand currentPlayerHand;
     private Hand dealerHand;
 
+    private enum Result{
+        LOSS, PUSH, WIN
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-        //initialise textviews
-        initialiseTextViews();
-        assignLinearLayouts();
-        //make sure our buttons do stuff
-        configureReturnButton();
+        initialiseUI();
 
-        bank = 300;
-        bet = 0;
-
-        configurePlayButton();
-        clickablePlayButton(false);
-
-        configureHitButton();
-        configureStayButton();
-        clickableGameButtons(false);
-
-        configureBetButtons();
-        clickableBetButtons(true);
-
-        initialiseShoe();
-
-        updateBankDisplay();
-        updateBetDisplay();
-
+        initialiseGameState();
     }
 
-    private void initialiseTextViews(){
+    private void initialiseUI(){
+        //individual buttons
+        returnButton = findViewById(R.id.buttonReturnToMain);
+        hitButton = findViewById(R.id.buttonHit);
+        stayButton = findViewById(R.id.buttonStay);
+        playButton = findViewById(R.id.buttonPlay);
+        betButton1 = findViewById(R.id.buttonBet1);
+        betButton2 = findViewById(R.id.buttonBet2);
+        betButton3 = findViewById(R.id.buttonBet3);
+
+        splitButton = findViewById(R.id.buttonSplit);
+
+        returnButton.setOnClickListener(this);
+        hitButton.setOnClickListener(this);
+        stayButton.setOnClickListener(this);
+        playButton.setOnClickListener(this);
+        betButton1.setOnClickListener(this);
+        betButton2.setOnClickListener(this);
+        betButton3.setOnClickListener(this);
+
+        splitButton.setOnClickListener(this);
+        //button bar containers
+        betBar = findViewById(R.id.barBets);
+        contextBar = findViewById(R.id.barContextuals);
+        playBar = findViewById(R.id.barPlay);
+        hitStayBar = findViewById(R.id.barHitStay);
+        //displays for current bet and player funds
+        betDisplay = findViewById(R.id.textviewBet);
+        bankDisplay = findViewById(R.id.textviewBank);
+        //text displays
         //dealer hand information
         dealerValueDisplay = findViewById(R.id.textviewValueDealer);
         dealerHandDisplay = findViewById(R.id.textviewHandDealer);
@@ -87,52 +101,84 @@ public class GameActivity extends AppCompatActivity {
         playerHandDisplay = findViewById(R.id.textviewHandPlayer);
         //result of the game
         gameResult = findViewById(R.id.textviewResult);
-        //displays for current bet and player funds
-        betDisplay = findViewById(R.id.textviewBet);
-        bankDisplay = findViewById(R.id.textviewBank);
+
     }
 
-    private void configureReturnButton() {
-        //back to main menu button
-        Button returnButton = findViewById(R.id.buttonReturnToMain);
-        returnButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+    public void onClick(View v){
+        switch(v.getId()){
+            case (R.id.buttonReturnToMain):
                 finish();
-            }
-        });
+                break;
+            case (R.id.buttonHit):
+                hitPlayer(currentPlayerHand);
+                break;
+            case (R.id.buttonStay):
+                stay2();
+                break;
+            case (R.id.buttonPlay):
+                play();
+                break;
+            case (R.id.buttonBet1):
+                increaseBet(20);
+                break;
+            case (R.id.buttonBet2):
+                increaseBet(50);
+                break;
+            case (R.id.buttonBet3):
+                increaseBet(100);
+                break;
+            case (R.id.buttonDoubleDown):
+
+                break;
+            case (R.id.buttonSplit):
+                split();
+                break;
+            case (R.id.buttonInsurance):
+
+                break;
+            case (R.id.buttonSurrender):
+
+                break;
+        }
+    }
+
+    private void initialiseGameState(){
+        bank = 300;
+        bet = 0;
+
+        updateBankDisplay();
+        updateBetDisplay();
+
+        clickablePlayButton(false);
+        clickableBetButtons(true);
+
+        initialiseShoe();
     }
 
     private void updatePlayerInformation(Hand currentHand){
-        playerHandDisplay.setText(currentHand.toString());
-        playerValueDisplay.setText(Integer.toString(currentHand.value()));
+        if (currentHand != null) {
+            playerHandDisplay.setText(currentHand.toString());
+            playerValueDisplay.setText(Integer.toString(currentHand.value()));
+        } else {
+            //just leave the previous information there
+        }
     }
     private void updateDealerInformation(Hand hand){
         dealerHandDisplay.setText(hand.toString());
         dealerValueDisplay.setText(Integer.toString(hand.value()));
     }
 
-    private void configureHitButton() {
-        hitButton = findViewById(R.id.buttonHit);
-        hitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                hitPlayer(currentPlayerHand);
-            }
-        });
-    }
     private void hitPlayer(Hand hand) {
         hand.hit(shoe.draw());
         updatePlayerInformation(hand);
         int newValue = hand.value();
         if (newValue == -1){
             gameResult.setText("Bust!");
-            lose(hand);
+            resolveHand(currentPlayerHand, Result.LOSS, false);
         } else if (newValue == 21){
-            stay();
+            stay2();
         }
     }
-
     private void hitDealer(Hand hand){
         if (dealerHand.count() < 1){
             dealerHand.hit(shoe.draw(false));
@@ -142,44 +188,76 @@ public class GameActivity extends AppCompatActivity {
         updateDealerInformation(hand);
     }
 
-    //lose, push and win are called by evaluateResult() when the player stays
-    private void lose(Hand currentHand){
-        clickableGameButtons(false);
-        //TODO: remove currentHand from playerHands
-        finishGame();
-    }
-    private void push(Hand currentHand){
-        clickableGameButtons(false);
-        int bet = currentHand.getBet();
-        increaseBank(bet);
+    private void resolveHand(Hand hand, Result result, boolean blackjack){
+        //clickableGameButtons(false);
+
+        int bet = hand.getBet();
+        int roi = 0;
+
+        switch (result){
+            case WIN:
+                int winnings = 0;
+                if (blackjack){
+                    winnings = (int) (bet*1.5);
+                } else winnings = bet;
+                roi = bet + winnings;
+                break;
+
+            case PUSH:
+                roi = bet;
+                break;
+
+            case LOSS:
+                break;
+        }
+        increaseBank(roi);
         updateBankDisplay();
-        finishGame();
-    }
-    private void win(Hand currentHand, boolean blackjack){
-        clickableGameButtons(false);
-        int bet = currentHand.getBet();
-        int winnings;
-        if (blackjack){
-            winnings = (int) (currentHand.getBet()*1.5);
-        } else winnings = currentHand.getBet();
-        int total = bet + winnings;
-        increaseBank(total);
-        updateBankDisplay();
-        finishGame();
+
+        currentPlayerHand = nextHand(currentPlayerHand, playerHands);
+        updatePlayerInformation(currentPlayerHand);
+
+        if (currentPlayerHand == null) {
+            finishGame();
+        }
     }
 
-    private void configureStayButton(){
-        stayButton = findViewById(R.id.buttonStay);
-        stayButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stay();
-            }
-        });
+    private Hand nextHand(Hand current, List<Hand> hands){
+        int currentIndex = hands.indexOf(current);
+        return getNextHand(hands, currentIndex-1);
     }
-    private void stay(){
-        clickableGameButtons(false);
 
+
+    private Hand getNextHand(List<Hand> hands, int indexToCheck){
+        if (indexToCheck < 0){
+            return null;
+        } else if (hands.get(indexToCheck) == null) {
+            return getNextHand(hands, indexToCheck-1);
+        } else return hands.get(indexToCheck);
+    }
+
+    private Hand previousHand(Hand current, List<Hand> hands){
+        int currentIndex = hands.indexOf(current);
+        return getNextHand(hands, currentIndex+1);
+    }
+
+    private Hand getPreviousHand(List<Hand> hands, int indexToCheck){
+        if (indexToCheck >= hands.size()){
+            return null;
+        } else if (hands.get(indexToCheck) == null) {
+            return getNextHand(hands, indexToCheck+1);
+        } else return hands.get(indexToCheck);
+    }
+
+    private void stay2(){
+        currentPlayerHand = nextHand(currentPlayerHand, playerHands);
+        if (currentPlayerHand == null){
+            dealerTurn();
+        } else {
+            updatePlayerInformation(currentPlayerHand);
+        }
+    }
+
+    private void dealerTurn(){
         dealerHand.getCard(0).flip(true);
         dealerHandDisplay.setText(dealerHand.toString());
 
@@ -188,39 +266,64 @@ public class GameActivity extends AppCompatActivity {
             dealerHandDisplay.setText(dealerHand.toString());
             dealerValueDisplay.setText(Integer.toString(dealerHand.value()));
         }
-        evaluateResult();
+
+        evaluateAllResults();
     }
 
-    private void evaluateResult(){
+    private void evaluateResult2(Hand hand){
         int dealerValue = dealerHand.value();
-        int playerValue = currentPlayerHand.value();
+        int playerValue = hand.value();
         boolean dealerNatural = dealerHand.natural();
-        boolean playerNatural = currentPlayerHand.natural();
+        boolean playerNatural = hand.natural();
 
         if (playerNatural) {
             if (dealerNatural) {
                 gameResult.setText("Natural push");
-                push(currentPlayerHand);
+                //push(currentPlayerHand);
+                resolveHand(hand, Result.PUSH, true);
             } else {
                 gameResult.setText("Player natural wins");
-                win(currentPlayerHand, true);
+                //win(currentPlayerHand, true);
+                resolveHand(hand, Result.WIN, true);
             }
         } else if (dealerNatural) {
             gameResult.setText("Dealer natural wins");
-            lose(currentPlayerHand);
+            //lose(currentPlayerHand);
+            resolveHand(hand, Result.LOSS, false);
         } else if (dealerValue == -1) {
             gameResult.setText("Dealer bust!");
-            win(currentPlayerHand, false);
+            //win(currentPlayerHand, false);
+            resolveHand(hand, Result.WIN, false);
         } else if (dealerValue == playerValue){
             gameResult.setText("Push");
-            push(currentPlayerHand);
+            //push(currentPlayerHand);
+            resolveHand(hand, Result.PUSH, false);
         } else if (dealerValue < playerValue){
             gameResult.setText("Player wins!");
-            win(currentPlayerHand, false);
+            //win(currentPlayerHand, false);
+            resolveHand(hand, Result.WIN, false);
         } else {
             gameResult.setText("Dealer wins!");
-            lose(currentPlayerHand);
+            //lose(currentPlayerHand);
+            resolveHand(hand, Result.LOSS, false);
         }
+    }
+
+
+    private void evaluateAllResults() {
+        int i = 0;
+        currentPlayerHand = playerHands.get(playerHands.size()-1);
+        while (currentPlayerHand != null){
+            System.out.println(i);
+            evaluateResult2(currentPlayerHand);
+            currentPlayerHand = nextHand(currentPlayerHand, playerHands);
+            i++;
+        }
+        //updateBetDisplay();
+        //updateBankDisplay();
+
+        finishGame();
+
     }
 
     private void initialiseShoe(){
@@ -235,6 +338,7 @@ public class GameActivity extends AppCompatActivity {
         dealerHand = new PlayHand();
 
         playerHands = new ArrayList<>();
+        //playerHands = new LinkedList<>();
         Hand newHand = new PlayHand(bet);
         playerHands.add(newHand);
         currentPlayerHand = playerHands.get(0);
@@ -246,15 +350,6 @@ public class GameActivity extends AppCompatActivity {
         hitPlayer(currentPlayerHand);
     }
 
-    private void configurePlayButton(){
-        playButton = findViewById(R.id.buttonPlay);
-        playButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                play();
-            }
-        });
-    }
     private void play(){
         gameResult.setText("");
         initialiseHands();
@@ -297,6 +392,22 @@ public class GameActivity extends AppCompatActivity {
 
     }
 
+    private Hand splitHand(Hand hand){
+        int bet = hand.getBet();
+        Card splitCard = hand.split();
+        Hand newHand = new PlayHand(bet, splitCard);
+        return newHand;
+    }
+
+    private void split(){
+        Hand toAdd = splitHand(currentPlayerHand);
+        playerHands.add(toAdd);
+        hitPlayer(currentPlayerHand);
+        currentPlayerHand = toAdd;
+        hitPlayer(currentPlayerHand);
+        updatePlayerInformation(currentPlayerHand);
+    }
+
     private void increaseBank(int amount){
         bank += amount;
     }
@@ -323,13 +434,13 @@ public class GameActivity extends AppCompatActivity {
             gameResult.setText("You broke, son. Go home.");
         } else {
             if (bank >= 20) {
-                bet20Button.setEnabled(enabled);
+                betButton1.setEnabled(enabled);
             }
             if (bank >= 50) {
-                bet50Button.setEnabled(enabled);
+                betButton2.setEnabled(enabled);
             }
             if (bank >= 100) {
-                bet100Button.setEnabled(enabled);
+                betButton3.setEnabled(enabled);
             }
         }
     }
@@ -356,40 +467,5 @@ public class GameActivity extends AppCompatActivity {
         }
 
     }
-
-    private void configureBetButtons(){
-        bet20Button = findViewById(R.id.buttonBet20);
-        bet50Button = findViewById(R.id.buttonBet50);
-        bet100Button = findViewById(R.id.buttonBet100);
-
-        bet20Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                increaseBet(20);
-            }
-        });
-        bet50Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                increaseBet(50);
-            }
-        });
-        bet100Button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                increaseBet(100);
-            }
-        });
-    }
-
-    private void assignLinearLayouts(){
-        betBar = findViewById(R.id.horizontalMiddleBets);
-        contextBar = findViewById(R.id.horizontalMiddleContextuals);
-
-        playBar = findViewById(R.id.horizontalTopPlay);
-        hitStayBar = findViewById(R.id.horizontalTopHitStay);
-    }
-
-
 
 }
