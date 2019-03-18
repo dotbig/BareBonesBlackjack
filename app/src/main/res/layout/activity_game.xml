@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textviewHandDealer" />
 
     <LinearLayout
-        android:id="@+id/horizontalCurrencyBar"
+        android:id="@+id/currencyBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -112,19 +112,19 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/vertical"
+        android:id="@+id/buttonBars"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@+id/horizontalCurrencyBar"
+        app:layout_constraintBottom_toTopOf="@+id/currencyBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:id="@+id/horizontalTopPlay"
+            android:id="@+id/barPlay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
@@ -140,7 +140,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalTopHitStay"
+            android:id="@+id/barHitStay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
@@ -167,28 +167,28 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalMiddleBets"
+            android:id="@+id/barBets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/buttonBet20"
+                android:id="@+id/buttonBet1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="20" />
 
             <Button
-                android:id="@+id/buttonBet50"
+                android:id="@+id/buttonBet2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="50" />
 
             <Button
-                android:id="@+id/buttonBet100"
+                android:id="@+id/buttonBet3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -197,7 +197,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/horizontalMiddleContextuals"
+            android:id="@+id/barContextuals"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
@@ -267,7 +267,7 @@
         android:gravity="center|top"
         android:text="playerHand"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/vertical"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBars"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
