@@ -8,6 +8,8 @@ interface Hand {
     void increaseBet(int amount);
     int count();
     int value();
+    Card split();
+    boolean isSplit();
     boolean natural();
     boolean softSeventeen();
     void clear();
