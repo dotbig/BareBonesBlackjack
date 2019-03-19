@@ -357,7 +357,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         updateBankDisplay();
 
         clickablePlayButton(false);
-        clickableBetButtons(false);
+        disableBetButtons();
         clickableGameButtons(true);
 
         showGameButtons(true);
@@ -382,7 +382,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void resetBet(){
         bet = 0;
         updateBetDisplay();
-        clickableBetButtons(true);
+        enableBetButtons();
     }
 
     private void finishGame(){
