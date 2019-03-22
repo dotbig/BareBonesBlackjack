@@ -6,6 +6,7 @@ import java.util.ArrayList;
 class PlayHand implements Hand {
     private List<Card> cards = new ArrayList<>();
     private int bet;
+    private boolean bust;
     private boolean split;
 
     PlayHand(){
@@ -23,14 +24,6 @@ class PlayHand implements Hand {
     }
 
     public void hit(Card draw){
-        cards.add(draw);
-    }
-
-    public void hit(Card draw, boolean faceUp){
-        Card toAdd = draw;
-        if (toAdd.isFaceUp() != faceUp){
-            toAdd.flip(faceUp);
-        }
         cards.add(draw);
     }
 
@@ -53,6 +46,14 @@ class PlayHand implements Hand {
     public Card split(){
         split = true;
         return cards.remove(1);
+    }
+
+    public void bust(){
+        bust = true;
+    }
+
+    public boolean busted(){
+        return bust;
     }
 
     public int count(){

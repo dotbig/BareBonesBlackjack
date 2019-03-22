@@ -23,4 +23,8 @@ class StandardDeck implements Deck {
         }
     }
 
+    public int count(){
+        return cards.size();
+    }
+
 }
