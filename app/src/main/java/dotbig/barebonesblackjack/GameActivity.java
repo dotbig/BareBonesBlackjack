@@ -22,8 +22,10 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private Button betButton2;
     private Button betButton3;
 
-    private Button doubleButton;
+    private Button doubleDownButton;
     private Button splitButton;
+    private Button insuranceButton;
+    private Button surrenderButton;
 
     //button containers
     private LinearLayout betBar;
@@ -49,6 +51,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     private int bank;
     private int bet;
+    private int insurance;
 
     private List<Hand> playerHands;
     private Hand currentPlayerHand;
@@ -80,6 +83,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         betButton3 = findViewById(R.id.buttonBet3);
 
         splitButton = findViewById(R.id.buttonSplit);
+        doubleDownButton = findViewById(R.id.buttonDoubleDown);
+        insuranceButton = findViewById(R.id.buttonInsurance);
+        surrenderButton = findViewById(R.id.buttonSurrender);
 
         returnButton.setOnClickListener(this);
         hitButton.setOnClickListener(this);
@@ -90,6 +96,10 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         betButton3.setOnClickListener(this);
 
         splitButton.setOnClickListener(this);
+        doubleDownButton.setOnClickListener(this);
+        insuranceButton.setOnClickListener(this);
+        surrenderButton.setOnClickListener(this);
+
         //button bar containers
         betBar = findViewById(R.id.barBets);
         contextBar = findViewById(R.id.barContextuals);
@@ -117,10 +127,11 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 finish();
                 break;
             case (R.id.buttonHit):
+                disableOptions();
                 hitPlayer(currentPlayerHand);
                 break;
             case (R.id.buttonStay):
-                //stay2();
+                disableOptions();
                 stay(currentPlayerHand);
                 break;
             case (R.id.buttonPlay):
@@ -136,17 +147,18 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 increaseBet(100);
                 break;
             case (R.id.buttonDoubleDown):
-
+                doubleDown(currentPlayerHand);
                 break;
             case (R.id.buttonSplit):
-                //split()
+                disableOptions();
                 split(currentPlayerHand);
                 break;
             case (R.id.buttonInsurance):
-
+                disableOptions();
+                insurance(currentPlayerHand);
                 break;
             case (R.id.buttonSurrender):
-
+                surrender(currentPlayerHand);
                 break;
         }
     }
@@ -158,18 +170,16 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         updateBankDisplay();
         updateBetDisplay();
 
-        clickablePlayButton(false);
-        clickableBetButtons(true);
-
         initialiseShoe();
+
+        togglePlayButton(false);
+        toggleBetButtons(true);
     }
 
     private void updatePlayerInformation(Hand hand){
         if (hand != null) {
             playerHandDisplay.setText(hand.toString());
             playerValueDisplay.setText(Integer.toString(hand.value()));
-        } else {
-            //just leave the previous information there
         }
     }
     private void updateDealerInformation(Hand hand){
@@ -177,154 +187,136 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         dealerValueDisplay.setText(Integer.toString(hand.value()));
     }
 
-    //TODO: like stay(), maybe make this return a Hand and do currentPlayerHand = bust(hand) when we use it
-    private void bust(Hand hand){
-        System.out.println("bust!");
-        gameResult.setText("Bust!");
-        log("Bust!");
-        hand.bust();
-
-        //TODO: remove currentPlayerHand usages
-        currentPlayerHand = getNextActiveHand(currentPlayerHand, playerHands);
-        if (currentPlayerHand == null){
-            //TODO: make sure we aren't evaluating hands that have already busted
-            dealerTurn();
-        } else {
-            updatePlayerInformation(currentPlayerHand);
-        }
-    }
-
-    private void hitPlayer(Hand hand) {
-        hand.hit(shoe.draw());
-        updatePlayerInformation(hand);
-        int newValue = hand.value();
-        if (newValue == -1){
-            bust(hand);
-        } else if (newValue == 21){
-            if (hand.natural()) {
-                dealerTurn();
-            }
-            log("hitPlayer 21");
-            stay(hand);
-        }
-    }
-    private void hitDealer(Hand hand){
-        if (hand.count() == 1){
-            hand.hit(shoe.draw(false));
-        } else {
-            hand.hit(shoe.draw(true));
-        }
-        updateDealerInformation(hand);
-    }
-
     //TODO: consolidate getHand methods, maybe use parameter boolean "active" to distinguish functionality
-    private Hand getLastHand(List<Hand> hands){
+    private Hand getLastHand(List<Hand> hands, boolean active){
         Hand current;
-        current = playerHands.get(hands.size()-1);
-        return current;
-    }
-
-    private Hand getLastActiveHand(List<Hand> hands){
-        Hand current;
-        current = playerHands.get(hands.size()-1);
-        if (current.busted() || current.value() == 21){
-            current = getNextActiveHand(current, hands);
+        current = hands.get(hands.size()-1);
+        if (active){
+            if (current.busted() || current.value() == 21){
+                current = getNextHand(current, hands, true);
+            }
         }
         return current;
     }
 
-    private Hand getNextActiveHand(Hand current, List<Hand> hands){
+    private Hand getNextHand(Hand current, List<Hand> hands, boolean active){
         if (current == null){
             return null;
         }
         int currentIndex = hands.indexOf(current);
-        return nextActiveHand(hands, currentIndex-1);
+        if (active){
+            return nextHand(hands, currentIndex-1, true);
+        }
+        return nextHand(hands, currentIndex-1, false);
     }
 
-    private Hand nextActiveHand(List<Hand> hands, int indexToCheck){
+    private Hand nextHand(List<Hand> hands, int indexToCheck, boolean active){
+        System.out.println("nextHand, index: " +Integer.toString(indexToCheck));
         if (indexToCheck < 0){
-            System.out.println("getNextActiveHand returning null");
-            return null;
-        } else if (hands.get(indexToCheck).busted()) {
-            System.out.println("getNextActiveHand busted, getting next");
-            return nextActiveHand(hands, indexToCheck-1);
-        } else if (hands.get(indexToCheck).value() == 21) {
-            System.out.println("getNextActiveHand 21, getting next");
-            return nextActiveHand(hands, indexToCheck-1);
-        } else {
-            System.out.println("getNextActiveHand: "+indexToCheck);
-            return hands.get(indexToCheck);
-        }
-    }
-
-    private Hand getNextHand(Hand current, List<Hand> hands){
-        if (current == null){
             return null;
         }
-        int currentIndex = hands.indexOf(current);
-        return nextHand(hands, currentIndex-1);
-    }
-
-    private Hand nextHand(List<Hand> hands, int indexToCheck){
-        if (indexToCheck < 0){
-            System.out.println("getNextHand returning null");
-            return null;
-        } else {
-            System.out.println("getNextHand: "+indexToCheck);
-            return hands.get(indexToCheck);
+        if (active){
+            System.out.println("nextHand, active: "+active);
+            if (hands.get(indexToCheck).busted() || hands.get(indexToCheck).value() == 21){
+                System.out.println("nextHand, not good enough");
+                return nextHand(hands, indexToCheck-1, true);
+            }
         }
+        return hands.get(indexToCheck);
     }
 
     //TODO: previous will be needed once we implement the ability to select which hand we're viewing
     private Hand previousHand(Hand current, List<Hand> hands){
         return null;
     }
-
     private Hand getPreviousHand(List<Hand> hands, int indexToCheck){
         return null;
     }
 
-
-    //if things start messing up, change hand back to currentPlayerHand
     //TODO: maybe make this return a Hand and do currentPlayerHand = stay(hand) when we use it
     private void stay(Hand hand){
-        hand = getNextActiveHand(hand, playerHands);
-        if (hand == null){
-            dealerTurn();
+        tryNextPlayerHand(hand);
+    }
+
+    //TODO: like stay(), maybe make this return a Hand and do currentPlayerHand = bust(hand) when we use it
+    private void bust(Hand hand){
+        log("Bust!");
+        hand.bust();
+
+        tryNextPlayerHand(hand);
+    }
+
+    private boolean bustCheck(Hand hand){
+        return hand.value() == -1;
+    }
+
+    //use it whenever we need another hand from stay bust etc
+    private void tryNextPlayerHand(Hand hand){
+        Hand nextHand = getNextHand(hand, playerHands, true);
+        if (nextHand == null){
+            dealerTurn(false);
         } else {
-            currentPlayerHand = hand;
+            currentPlayerHand = nextHand;
             updatePlayerInformation(currentPlayerHand);
+            toggleSplitButton(allowSplit(currentPlayerHand));
         }
     }
 
-    private void dealerTurn(){
-        //TODO: if player has natural and dealer doesn't, don't bother drawing cards for dealer; just flip and win
-        //TODO: maybe add parameter boolean playerNatural
-        /*maybe something like
-            if (playerNatural){
-                if (!dealerNatural){
-                    flip
-                    updateDealerInformation
-                    evaluateAllResults
+    private void dealerTurn(boolean playerNatural){
+        //TODO: consolidate reveal() calls
+        if (numberOfLiveHands() > 0) {
+            reveal(dealerHand);
+            updateDealerInformation(dealerHand);
+            if (!playerNatural) {
+                while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()) {
+                    hitDealer(dealerHand);
+                    updateDealerInformation(dealerHand);
                 }
             }
-         */
-        dealerHand.getCard(1).flip(true);
-        updateDealerInformation(dealerHand);
-
-        while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()){
-            hitDealer(dealerHand);
+        }
+        //TODO: consolidate reveal() calls
+        if (insurance > 0){
+            reveal(dealerHand);
             updateDealerInformation(dealerHand);
+            if (dealerHand.natural()){
+                payInsurance();
+            }
         }
         evaluateAllResults();
     }
 
-    //TODO: make sure we aren't evaluating hands that have already busted
-    private void evaluateResult2(Hand hand){
+    private int numberOfLiveHands(){
+        int living = 0;
+        for (Hand hand : playerHands){
+            if (!hand.busted()){
+                living++;
+            }
+        }
+        return living;
+    }
+
+    private void reveal(Hand hand){
+        hand.getCard(1).flip(true);
+    }
+
+    private void evaluateAllResults() {
+        currentPlayerHand = getLastHand(playerHands, false);
+        while (currentPlayerHand != null){
+            if (!currentPlayerHand.busted()) {
+                evaluateResult(currentPlayerHand);
+            }
+            currentPlayerHand = getNextHand(currentPlayerHand, playerHands, false);
+        }
+        finishGame();
+    }
+
+    private void evaluateResult(Hand hand){
         int dealerValue = dealerHand.value();
         int playerValue = hand.value();
         boolean dealerNatural = dealerHand.natural();
         boolean playerNatural = hand.natural();
+
+        log(Integer.toString(playerValue)+" vs "+Integer.toString(dealerValue));
 
         if (playerNatural) {
             if (dealerNatural) {
@@ -360,57 +352,36 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void resolveHand(Hand hand, Result result){
-        //clickableGameButtons(false);
         boolean blackjack = hand.natural();
         int bet = hand.getBet();
         int roi = 0;
+        String message;
 
         switch (result){
             case WIN:
-                int winnings = 0;
+                int winnings;
                 if (blackjack){
                     winnings = (int) (bet*1.5);
-                } else winnings = bet;
+                    message = "NATURAL; won "+Integer.toString(winnings);
+                } else {
+                    winnings = bet;
+                    message = "WIN; won "+Integer.toString(winnings);
+                }
                 roi = bet + winnings;
                 break;
-
             case PUSH:
                 roi = bet;
+                message = "PUSH; returning your "+Integer.toString(bet);
                 break;
-
             case LOSS:
+                message = "LOSS; lost your "+Integer.toString(bet);
                 break;
+            default:
+                message = "";
         }
         increaseBank(roi);
         updateBankDisplay();
-
-        log("won "+ roi);
-    }
-
-
-    private void evaluateAllResults() {
-        //testing stuff
-        currentPlayerHand = playerHands.get(playerHands.size()-1);
-        while (currentPlayerHand != null) {
-            log(currentPlayerHand.toString());
-            currentPlayerHand = getNextHand(currentPlayerHand, playerHands);
-        }
-        //end testing stuff
-
-        currentPlayerHand = getLastHand(playerHands);
-        int i = 0;
-        while (currentPlayerHand != null){
-            if (!currentPlayerHand.busted()) {
-                System.out.println(i);
-                evaluateResult2(currentPlayerHand);
-            }
-            currentPlayerHand = getNextHand(currentPlayerHand, playerHands);
-            i++;
-        }
-        //updateBetDisplay();
-        //updateBankDisplay();
-
-        finishGame();
+        log(message);
     }
 
     private void initialiseShoe(){
@@ -421,42 +392,82 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         shoe.setPenetration(penetration);
         shoe.shuffle();
     }
+
     private void initialiseHands(){
         //maybe pass in bet value, taken from user input before calling this method
         dealerHand = new PlayHand();
-
         playerHands = new ArrayList<>();
         Hand newHand = new PlayHand(bet);
         playerHands.add(newHand);
         currentPlayerHand = playerHands.get(0);
     }
-    private void deal(){
-        hitDealer(dealerHand);
-        hitPlayer(currentPlayerHand);
-        hitDealer(dealerHand);
-            if (dealerHand.natural()){
-                hitPlayer(currentPlayerHand);
-                dealerTurn();
-            }
-        hitPlayer(currentPlayerHand);
 
+    private void deal(){
+        dealerHand.hit(shoe.draw());
+        currentPlayerHand.hit(shoe.draw());
+        dealerHand.hit(shoe.draw(false));
+        currentPlayerHand.hit(shoe.draw());
+    }
+
+    private Card draw(){
+        return shoe.draw();
+    }
+
+    private Card drawFaceDown(){
+        return shoe.draw(false);
+    }
+
+    private void hit(Hand hand){
+        hand.hit(draw());
+    }
+
+    private void hitFaceDown(Hand hand){
+        hand.hit(drawFaceDown());
+    }
+
+    private void hitPlayer(Hand hand) {
+        hand.hit(shoe.draw());
+        updatePlayerInformation(hand);
+        int newValue = hand.value();
+        if (newValue == -1){
+            bust(hand);
+        } else if (newValue == 21){
+            log("hit 21");
+            if (hand.natural()) {
+                dealerTurn(true);
+            } else {
+                stay(hand);
+            }
+        }
+    }
+
+    private void hitDealer(Hand hand){
+        if (hand.count() == 1){
+            hand.hit(shoe.draw(false));
+        } else {
+            hand.hit(shoe.draw(true));
+        }
+        updateDealerInformation(hand);
     }
 
     private void play(){
-        gameResult.setText("");
         initialiseHands();
-
         updateBankDisplay();
+        toggleBetButtons(false);
 
-        clickablePlayButton(false);
-        disableBetButtons();
-        clickableGameButtons(true);
-
-        showGameButtons(true);
         deal();
 
-        //updatePlayerInformation(currentPlayerHand);
+        showGameButtons(true);
         updateDealerInformation(dealerHand);
+        updatePlayerInformation(currentPlayerHand);
+
+        if (currentPlayerHand.natural()){
+            dealerTurn(true);
+        } else {
+            firstTurnOptionsCheck();
+            toggleGameButtons(true);
+        }
+        //dont put things here
     }
 
     private void increaseBet(int amount){
@@ -464,9 +475,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         decreaseBank(amount);
         updateBetDisplay();
         updateBankDisplay();
-        clickablePlayButton(true);
+        toggleBetButtons(true);
+        togglePlayButton(true);
     }
-
 
     private void decreaseBet(int amount){
 
@@ -475,31 +486,26 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void resetBet(){
         bet = 0;
         updateBetDisplay();
-        enableBetButtons();
+        toggleBetButtons(true);
     }
 
     private void finishGame(){
         resetBet();
+        insurance = 0;
         if (shoe.penetrationCheck()) {
             initialiseShoe();
         }
-        log("round over");
+        log("round over \n");
         showGameButtons(false);
-        clickablePlayButton(false);
-
-    }
-
-    private Hand splitHand(Hand hand){
-        int bet = hand.getBet();
-        Card splitCard = hand.split();
-        Hand newHand = new PlayHand(bet, splitCard);
-        return newHand;
+        togglePlayButton(false);
+        toggleBetButtons(true);
     }
 
     private void split(Hand hand){
         Hand master = hand;
         Hand branch = splitHand(master);
 
+        decreaseBank(branch.getBet());
         playerHands.add(branch);
 
         branch.hit(shoe.draw());
@@ -518,19 +524,154 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             log("split 21 master");
         }
 
-        currentPlayerHand = getLastActiveHand(playerHands);
-        updatePlayerInformation(currentPlayerHand);
+        updateEventLog();
+
+        currentPlayerHand = getLastHand(playerHands, true);
+
         if (currentPlayerHand == null){
-            dealerTurn();
+            dealerTurn(false);
+        } else {
+            updatePlayerInformation(currentPlayerHand);
+            toggleSplitButton(allowSplit(currentPlayerHand));
+        }
+    }
+    //only to be used by split()
+    private Hand splitHand(Hand hand){
+        int bet = hand.getBet();
+        Card splitCard = hand.split();
+        return new PlayHand(bet, splitCard);
+    }
+
+    private void doubleDown(Hand hand){
+        int bet = hand.getBet();
+        bank -= bet;
+        hand.increaseBet(bet);
+        log("doubled down, hand's bet is now "+2*bet);
+        hand.hit(shoe.draw());
+        updatePlayerInformation(hand);
+        if (hand.value() == -1){
+            bust(hand);
+        } else {
+            stay(hand);
+        }
+    }
+
+    private void surrender(Hand hand){
+        int recoup;
+        recoup = (int)(hand.getBet()/2);
+        increaseBank(recoup);
+        finishGame();
+    }
+
+    private void firstTurnOptionsCheck(){
+        toggleSplitButton(allowSplit(currentPlayerHand));
+        toggleInsuranceButton(allowInsurance(currentPlayerHand));
+        toggleSurrenderButton(true);
+    }
+
+    private void disableOptions(){
+        toggleSplitButton(false);
+        toggleInsuranceButton(false);
+        toggleSurrenderButton(false);
+    }
+
+    private void toggleSurrenderButton(boolean enabled){
+        surrenderButton.setEnabled(enabled);
+    }
+
+    private boolean allowInsurance(Hand hand){
+        int max = (int)hand.getBet()/2;
+        if (hand.count() > 2) {
+            return false;
+        }
+        if (!canBet(max)) {
+            return false;
+        }
+        return dealerHand.getCard(0).getRank().equals("Ace");
+    }
+
+    private void toggleInsuranceButton(boolean enabled){
+        insuranceButton.setEnabled(enabled);
+    }
+
+    private void insurance(Hand hand){
+        int max = (int)hand.getBet()/2;
+        decreaseBank(max);
+        insurance = max;
+        toggleInsuranceDisplay(true);
+        log("took insurance of "+Integer.toString(insurance));
+    }
+
+    private void toggleInsuranceDisplay(boolean enabled){
+
+    }
+
+    private void payInsurance(){
+        int payout = insurance*2;
+        increaseBank(payout);
+        toggleInsuranceDisplay(false);
+        log("paid insurance of "+Integer.toString(payout));
+    }
+
+    private void toggleSplitButton(boolean enabled){
+        splitButton.setEnabled(enabled);
+    }
+
+    private boolean allowSplit(Hand hand){
+        if (hand.count() > 2) {
+            return false;
+        }
+        if (!canBet(hand.getBet())) {
+            return false;
+        }
+        return (cardValue(hand.getCard(0)) == cardValue(hand.getCard(1)));
+    }
+
+    private boolean canBet(int bet){
+        return bank >= bet;
+    }
+
+    private int cardValue(Card card){
+        switch (card.getRank()){
+            case "Ace":
+                return 1;
+            case "Two":
+                return 2;
+            case "Three":
+                return 3;
+            case "Four":
+                return 4;
+            case "Five":
+                return 5;
+            case "Six":
+                return 6;
+            case "Seven":
+                return 7;
+            case "Eight":
+                return 8;
+            case "Nine":
+                return 9;
+            case "Ten":
+                return 10;
+            case "Jack":
+                return 10;
+            case "Queen":
+                return 10;
+            case "King":
+                return 10;
+            default:
+                return 0;
         }
     }
 
     private void increaseBank(int amount){
         bank += amount;
+        updateBankDisplay();
     }
 
     private void decreaseBank(int amount){
         bank -= amount;
+        updateBankDisplay();
     }
 
     private void updateBetDisplay(){
@@ -541,28 +682,30 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         bankDisplay.setText(Integer.toString(bank));
     }
 
-    private void clickableGameButtons(boolean enabled){
+    private void toggleGameButtons(boolean enabled){
         hitButton.setEnabled(enabled);
         stayButton.setEnabled(enabled);
     }
 
-    private void clickableBetButtons(boolean enabled){
-        if (bank < 20){
-            gameResult.setText("You broke, son. Go home.");
+    private void toggleBetButtons(boolean enabled){
+        if (!canBet(20)){
+            betButton1.setEnabled(false);
+            betButton2.setEnabled(false);
+            betButton3.setEnabled(false);
         } else {
-            if (bank >= 20) {
+            if (canBet(20)) {
                 betButton1.setEnabled(enabled);
-            }
-            if (bank >= 50) {
+            } else betButton1.setEnabled(false);
+            if (canBet(50)) {
                 betButton2.setEnabled(enabled);
-            }
-            if (bank >= 100) {
+            } else betButton2.setEnabled(false);
+            if (canBet(100)) {
                 betButton3.setEnabled(enabled);
-            }
+            } else betButton3.setEnabled(false);
         }
     }
 
-    private void clickablePlayButton(boolean enabled){
+    private void togglePlayButton(boolean enabled){
         if (bet > 0 && enabled){
             playButton.setEnabled(true);
         } else {
@@ -582,7 +725,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             hitStayBar.setVisibility(View.GONE);
             contextBar.setVisibility(View.GONE);
         }
-
     }
 
     private void updateEventLog(){
