@@ -4,6 +4,12 @@ class PlayingCard implements Card {
     String suit;
     String rank;
     boolean faceUp;
+    enum Suit {
+        HEARTS, DIAMONDS, CLUBS, SPADES, JOKER
+    }
+    enum Rank {
+        ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, JOKER
+    }
 
     //when we construct a card we need a suit and a rank
     //default visibility is face up
@@ -98,4 +104,10 @@ class PlayingCard implements Card {
         return rank + " of " + suit;
     }
 
+    //TODO: change the String toString() returns to concise version:
+    //TODO: King of Hearts -> K♥
+    //TODO: Three of Spades -> 3♠
+    //TODO: Ace of Diamonds -> A♦
+    //TODO: Ten of Clubs -> 10♣
+    //TODO: then right align the textview so the symbols line up
 }
