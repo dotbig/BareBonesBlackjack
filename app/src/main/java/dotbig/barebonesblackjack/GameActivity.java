@@ -246,7 +246,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         tryNextPlayerHand(hand);
     }
 
-    private boolean bustCheck(Hand hand){
+    private boolean goneBust(Hand hand){
         return hand.value() == -1;
     }
 
@@ -382,7 +382,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 message = "";
         }
         increaseBank(roi);
-        updateBankDisplay();
         log(message);
     }
 
@@ -396,7 +395,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void initialiseHands(){
-        //maybe pass in bet value, taken from user input before calling this method
         dealerHand = new PlayHand();
         playerHands = new ArrayList<>();
         Hand newHand = new PlayHand(bet);
@@ -405,30 +403,22 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void deal(){
-        dealerHand.hit(shoe.draw());
-        currentPlayerHand.hit(shoe.draw());
-        dealerHand.hit(shoe.draw(false));
-        currentPlayerHand.hit(shoe.draw());
-    }
-
-    private Card draw(){
-        return shoe.draw();
-    }
-
-    private Card drawFaceDown(){
-        return shoe.draw(false);
+        hit(dealerHand);
+        hit(currentPlayerHand);
+        hitFaceDown(dealerHand);
+        hit(currentPlayerHand);
     }
 
     private void hit(Hand hand){
-        hand.hit(draw());
+        hand.hit(shoe.draw());
     }
 
     private void hitFaceDown(Hand hand){
-        hand.hit(drawFaceDown());
+        hand.hit(shoe.draw(false));
     }
 
     private void hitPlayer(Hand hand) {
-        hand.hit(shoe.draw());
+        hit(hand);
         updatePlayerInformation(hand);
         int newValue = hand.value();
         if (newValue == -1){
@@ -445,9 +435,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     private void hitDealer(Hand hand){
         if (hand.count() == 1){
-            hand.hit(shoe.draw(false));
+            hitFaceDown(hand);
         } else {
-            hand.hit(shoe.draw(true));
+            hit(hand);
         }
         updateDealerInformation(hand);
     }
@@ -510,8 +500,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         decreaseBank(branch.getBet());
         playerHands.add(branch);
 
-        branch.hit(shoe.draw());
-        master.hit(shoe.draw());
+        hit(branch);
+        hit(master);
         int branchValue = branch.value();
         int masterValue = master.value();
 
@@ -549,7 +539,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         bank -= bet;
         hand.increaseBet(bet);
         log("doubled down, hand's bet is now "+2*bet);
-        hand.hit(shoe.draw());
+        hit(hand);
         updatePlayerInformation(hand);
         if (hand.value() == -1){
             bust(hand);
