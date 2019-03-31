@@ -35,6 +35,11 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private LinearLayout currencyBar;
     //information displays
     private TextView playerHandDisplay;
+
+    private TextView playerHandDisplay2;
+    private TextView playerHandDisplay3;
+    private TextView playerHandDisplay4;
+
     private TextView playerValueDisplay;
     private TextView dealerHandDisplay;
     private TextView dealerValueDisplay;
@@ -56,6 +61,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private List<Hand> playerHands;
     private Hand currentPlayerHand;
     private Hand dealerHand;
+
+    private List<TextView> handDisplays;
 
     private enum Result{
         LOSS, PUSH, WIN
@@ -115,6 +122,17 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         //player hand information
         playerValueDisplay = findViewById(R.id.textviewValuePlayer);
         playerHandDisplay = findViewById(R.id.textviewHandPlayer);
+
+        playerHandDisplay2 = findViewById(R.id.textviewHandPlayer2);
+        playerHandDisplay3 = findViewById(R.id.textviewHandPlayer3);
+        playerHandDisplay4 = findViewById(R.id.textviewHandPlayer4);
+
+        handDisplays = new ArrayList<>();
+        handDisplays.add(playerHandDisplay);
+        handDisplays.add(playerHandDisplay2);
+        handDisplays.add(playerHandDisplay3);
+        handDisplays.add(playerHandDisplay4);
+
         //result of the game
         gameResult = findViewById(R.id.textviewResult);
 
@@ -187,7 +205,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         dealerValueDisplay.setText(Integer.toString(hand.value()));
     }
 
-    //TODO: consolidate getHand methods, maybe use parameter boolean "active" to distinguish functionality
     private Hand getLastHand(List<Hand> hands, boolean active){
         Hand current;
         current = hands.get(hands.size()-1);
@@ -233,22 +250,21 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return null;
     }
 
-    //TODO: maybe make this return a Hand and do currentPlayerHand = stay(hand) when we use it
     private void stay(Hand hand){
         tryNextPlayerHand(hand);
     }
 
-    //TODO: like stay(), maybe make this return a Hand and do currentPlayerHand = bust(hand) when we use it
     private void bust(Hand hand){
         log("Bust!");
         hand.bust();
-
         tryNextPlayerHand(hand);
     }
 
-    private boolean goneBust(Hand hand){
+    private boolean justBusted(Hand hand){
         return hand.value() == -1;
     }
+
+    private boolean justHitTwentyOne(Hand hand){ return hand.value() == 21;}
 
     //use it whenever we need another hand from stay bust etc
     private void tryNextPlayerHand(Hand hand){
@@ -262,23 +278,53 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
+    private boolean natural(Hand hand){
+        return hand.natural();
+    }
+
+    private boolean possibleDealerNatural(){
+        if (getUpCard().getValue() == 1){
+            return true;
+        }
+        if (getUpCard().getValue() == 10){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean insuranceTaken(){
+        return insurance > 0;
+    }
+
+    private boolean shouldReveal(boolean playerNatural){
+        //if player has natural and the dealer can't have natural, don't bother revealing
+        //if dealer can't have natural then it rules out the possibility that player took insurance
+        if (playerNatural && !possibleDealerNatural()){
+            return false;
+        } else if (!insuranceTaken() && numberOfLiveHands() < 1){
+        //card should be revealed if player took insurance so they can see if they should get paid
+        //card should be revealed if player has hands left in play
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     private void dealerTurn(boolean playerNatural){
-        //TODO: consolidate revealFaceDown() calls
+        if (shouldReveal(playerNatural)){
+            revealDownCard();
+        }
+
         if (numberOfLiveHands() > 0) {
-            revealFaceDown(dealerHand);
-            updateDealerInformation(dealerHand);
             if (!playerNatural) {
                 while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()) {
                     hitDealer(dealerHand);
-                    updateDealerInformation(dealerHand);
                 }
             }
         }
-        //TODO: consolidate revealFaceDown() calls
-        if (insurance > 0){
-            revealFaceDown(dealerHand);
-            updateDealerInformation(dealerHand);
-            if (dealerHand.natural()){
+
+        if (insuranceTaken()) {
+            if (natural(dealerHand)) {
                 payInsurance();
             } else {
                 log("lost your insurance");
@@ -297,8 +343,13 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return living;
     }
 
-    private void revealFaceDown(Hand hand){
-        hand.getCard(1).flip(true);
+    private void revealDownCard(){
+        dealerHand.getCard(1).flip(true);
+        updateDealerInformation(dealerHand);
+    }
+
+    private Card getUpCard(){
+        return dealerHand.getCard(0);
     }
 
     private void evaluateAllResults() {
@@ -420,25 +471,16 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void hitPlayer(Hand hand) {
         hit(hand);
         updatePlayerInformation(hand);
-        int newValue = hand.value();
-        if (newValue == -1){
+        if (justBusted(hand)){
             bust(hand);
-        } else if (newValue == 21){
+        } else if (justHitTwentyOne(hand)){
             log("hit 21");
-            if (hand.natural()) {
-                dealerTurn(true);
-            } else {
-                stay(hand);
-            }
+            stay(hand);
         }
     }
 
     private void hitDealer(Hand hand){
-        if (hand.count() == 1){
-            hitFaceDown(hand);
-        } else {
-            hit(hand);
-        }
+        hit(hand);
         updateDealerInformation(hand);
     }
 
@@ -453,7 +495,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         updateDealerInformation(dealerHand);
         updatePlayerInformation(currentPlayerHand);
 
-        if (currentPlayerHand.natural()){
+        //TODO: if natural(player), allow take even money
+        if (natural(currentPlayerHand)){
             dealerTurn(true);
         } else {
             firstTurnOptionsCheck();
@@ -496,28 +539,24 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void split(Hand hand){
         Hand master = hand;
         Hand branch = splitHand(master);
-
         decreaseBank(branch.getBet());
         playerHands.add(branch);
 
         hit(branch);
         hit(master);
-        int branchValue = branch.value();
-        int masterValue = master.value();
 
-        if (branchValue == -1) {
+        if (justBusted(branch)) {
             branch.bust();
-        } else if (branchValue == 21){
+        } else if (justHitTwentyOne(branch)){
             log("split 21 branch");
         }
-        if (masterValue == -1){
+        if (justBusted(master)){
             master.bust();
-        } else if (masterValue == 21){
+        } else if (justHitTwentyOne(master)){
             log("split 21 master");
         }
 
         updateEventLog();
-
         currentPlayerHand = getLastHand(playerHands, true);
 
         if (currentPlayerHand == null){
@@ -541,7 +580,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         log("doubled down, hand's bet is now "+2*bet);
         hit(hand);
         updatePlayerInformation(hand);
-        if (hand.value() == -1){
+        if (justBusted(hand)){
             bust(hand);
         } else {
             stay(hand);
