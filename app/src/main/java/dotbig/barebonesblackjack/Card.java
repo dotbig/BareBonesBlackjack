@@ -1,9 +1,11 @@
 package dotbig.barebonesblackjack;
 
 interface Card {
-    boolean isFaceUp();
-    boolean flip(boolean face);
     String getSuit();
     String getRank();
+    int getValue();
+    boolean isAce();
+    boolean isFaceUp();
+    void flip(boolean faceUp);
     String toString();
 }

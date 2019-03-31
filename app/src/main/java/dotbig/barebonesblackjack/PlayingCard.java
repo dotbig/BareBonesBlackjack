@@ -1,113 +1,102 @@
 package dotbig.barebonesblackjack;
 
 class PlayingCard implements Card {
-    String suit;
-    String rank;
-    boolean faceUp;
-    enum Suit {
-        HEARTS, DIAMONDS, CLUBS, SPADES, JOKER
-    }
-    enum Rank {
-        ACE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE, TEN, JACK, QUEEN, KING, JOKER
-    }
+    private Suit suit;
+    private Rank rank;
+    private boolean faceUp;
 
-    //when we construct a card we need a suit and a rank
-    //default visibility is face up
     PlayingCard(int suit, int rank){
         faceUp = true;
         switch(suit){
             case 0:
-                this.suit = "Hearts";
+                this.suit = Suit.HEARTS;
                 break;
             case 1:
-                this.suit = "Diamonds";
+                this.suit = Suit.DIAMONDS;
                 break;
             case 2:
-                this.suit = "Clubs";
+                this.suit = Suit.CLUBS;
                 break;
             case 3:
-                this.suit = "Spades";
+                this.suit = Suit.SPADES;
                 break;
             default:
-                this.suit = "Joker";
+                this.suit = Suit.JOKER;
                 break;
         }
 
         switch(rank){
             case 0:
-                this.rank = "Ace";
+                this.rank = Rank.ACE;
                 break;
             case 1:
-                this.rank = "Two";
+                this.rank = Rank.TWO;
                 break;
             case 2:
-                this.rank = "Three";
+                this.rank = Rank.THREE;
                 break;
             case 3:
-                this.rank = "Four";
+                this.rank = Rank.FOUR;
                 break;
             case 4:
-                this.rank = "Five";
+                this.rank = Rank.FIVE;
                 break;
             case 5:
-                this.rank = "Six";
+                this.rank = Rank.SIX;
                 break;
             case 6:
-                this.rank = "Seven";
+                this.rank = Rank.SEVEN;
                 break;
             case 7:
-                this.rank = "Eight";
+                this.rank = Rank.EIGHT;
                 break;
             case 8:
-                this.rank = "Nine";
+                this.rank = Rank.NINE;
                 break;
             case 9:
-                this.rank = "Ten";
+                this.rank = Rank.TEN;
                 break;
             case 10:
-                this.rank = "Jack";
+                this.rank = Rank.JACK;
                 break;
             case 11:
-                this.rank = "Queen";
+                this.rank = Rank.QUEEN;
                 break;
             case 12:
-                this.rank = "King";
+                this.rank = Rank.KING;
                 break;
             default:
-                this.suit = "Joker";
+                this.rank = Rank.JOKER;
                 break;
         }
     }
 
-    public String getSuit(){
-        return suit;
+    public String getSuit() {
+        return suit.getSuit();
     }
 
     public String getRank(){
-        return rank;
+        return rank.getRank();
+    }
+
+    public int getValue(){
+        return rank.getValue();
+    }
+
+    public boolean isAce(){
+        return rank.isAce();
     }
 
     public boolean isFaceUp(){
         return faceUp;
     }
 
-    public boolean flip(boolean visible){
-        if (faceUp == visible){
-            return faceUp;
-        } else {
-            faceUp = visible;
-            return faceUp;
-        }
+    public void flip(boolean faceUp){
+        this.faceUp = faceUp;
     }
 
     public String toString(){
-        return rank + " of " + suit;
+        return rank.getRank()+suit.getSuit();
     }
 
-    //TODO: change the String toString() returns to concise version:
-    //TODO: King of Hearts -> K♥
-    //TODO: Three of Spades -> 3♠
-    //TODO: Ace of Diamonds -> A♦
-    //TODO: Ten of Clubs -> 10♣
-    //TODO: then right align the textview so the symbols line up
 }

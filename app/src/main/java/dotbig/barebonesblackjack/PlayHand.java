@@ -98,9 +98,9 @@ class PlayHand implements Hand {
         StringBuilder currentHand = new StringBuilder();
         for (Card c : cards){
             if (!c.isFaceUp()){
-                currentHand.append("Face down\n");
+                currentHand.append("??\n");
             } else {
-                currentHand.append(c.getRank() + " of " + c.getSuit() + "\n");
+                currentHand.append(c.toString()+"\n");
             }
         }
         return currentHand.toString();
@@ -109,7 +109,7 @@ class PlayHand implements Hand {
     private int numberOfAces() {
         int aces = 0;
         for (Card c : cards){
-            if (c.getRank() == "Ace"){
+            if (c.isAce()){
                 aces++;
             }
         }
@@ -119,47 +119,8 @@ class PlayHand implements Hand {
     private int valueWithoutAces() {
         int runningTotal = 0;
         for (Card c : cards) {
-            switch (c.getRank()) {
-                case "Ace":
-                    break;
-                case "Two":
-                    runningTotal += 2;
-                    break;
-                case "Three":
-                    runningTotal += 3;
-                    break;
-                case "Four":
-                    runningTotal += 4;
-                    break;
-                case "Five":
-                    runningTotal += 5;
-                    break;
-                case "Six":
-                    runningTotal += 6;
-                    break;
-                case "Seven":
-                    runningTotal += 7;
-                    break;
-                case "Eight":
-                    runningTotal += 8;
-                    break;
-                case "Nine":
-                    runningTotal += 9;
-                    break;
-                case "Ten":
-                    runningTotal += 10;
-                    break;
-                case "Jack":
-                    runningTotal += 10;
-                    break;
-                case "Queen":
-                    runningTotal += 10;
-                    break;
-                case "King":
-                    runningTotal += 10;
-                    break;
-                default:
-                    break;
+            if (c.getValue() != 1){
+                runningTotal += c.getValue();
             }
         }
         return runningTotal;
@@ -169,7 +130,7 @@ class PlayHand implements Hand {
         return numberOfAces() + valueWithoutAces();
     }
 
-    private int valueOptimal(int aces, int sansAces){
+    private int valueOptimal(int numAces, int valWithoutAces){
         /*
         returns the highest value of the hand without busting, accounting for aces
         if bust is unavoidable, returns -1
@@ -200,11 +161,11 @@ class PlayHand implements Hand {
                 when A = 0 and B = numberOfAces we've gone through all unique combinations
         */
         int result = -1;
-        if (aces > 0){
-            int[] combinations = new int[aces + 1];
-            int ones = aces;
+        if (numAces > 0){
+            int[] combinations = new int[numAces + 1];
+            int ones = numAces;
             int elevens = 0;
-            for (int i = 0; i <= aces; i++) {
+            for (int i = 0; i <= numAces; i++) {
                 int total = ones + elevens*11;
                 combinations[i] = total;
                 ones -= 1;
@@ -213,7 +174,7 @@ class PlayHand implements Hand {
             //add each combination to our running total, keeping the best one
             int currentBest = -1;
             for (int i = 0; i < combinations.length; i++) {
-                int candidate = sansAces + combinations[i];
+                int candidate = valWithoutAces + combinations[i];
                 if ((currentBest < candidate) && (candidate <= 21)) {
                     currentBest = candidate;
                 }
@@ -221,8 +182,8 @@ class PlayHand implements Hand {
             result = currentBest;
         } else
             //if we don't have any aces, then our total is just the raw values of our cards
-            if (sansAces <= 21){
-                result = sansAces;
+            if (valWithoutAces <= 21){
+                result = valWithoutAces;
             }
         return result;
     }

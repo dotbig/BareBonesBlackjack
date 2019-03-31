@@ -263,9 +263,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void dealerTurn(boolean playerNatural){
-        //TODO: consolidate reveal() calls
+        //TODO: consolidate revealFaceDown() calls
         if (numberOfLiveHands() > 0) {
-            reveal(dealerHand);
+            revealFaceDown(dealerHand);
             updateDealerInformation(dealerHand);
             if (!playerNatural) {
                 while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()) {
@@ -274,12 +274,14 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 }
             }
         }
-        //TODO: consolidate reveal() calls
+        //TODO: consolidate revealFaceDown() calls
         if (insurance > 0){
-            reveal(dealerHand);
+            revealFaceDown(dealerHand);
             updateDealerInformation(dealerHand);
             if (dealerHand.natural()){
                 payInsurance();
+            } else {
+                log("lost your insurance");
             }
         }
         evaluateAllResults();
@@ -295,7 +297,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return living;
     }
 
-    private void reveal(Hand hand){
+    private void revealFaceDown(Hand hand){
         hand.getCard(1).flip(true);
     }
 
@@ -587,7 +589,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         if (!canBet(max)) {
             return false;
         }
-        return dealerHand.getCard(0).getRank().equals("Ace");
+        return dealerHand.getCard(0).isAce();
     }
 
     private void toggleInsuranceButton(boolean enabled){
@@ -632,36 +634,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private int cardValue(Card card){
-        switch (card.getRank()){
-            case "Ace":
-                return 1;
-            case "Two":
-                return 2;
-            case "Three":
-                return 3;
-            case "Four":
-                return 4;
-            case "Five":
-                return 5;
-            case "Six":
-                return 6;
-            case "Seven":
-                return 7;
-            case "Eight":
-                return 8;
-            case "Nine":
-                return 9;
-            case "Ten":
-                return 10;
-            case "Jack":
-                return 10;
-            case "Queen":
-                return 10;
-            case "King":
-                return 10;
-            default:
-                return 0;
-        }
+        return card.getValue();
     }
 
     private void increaseBank(int amount){
