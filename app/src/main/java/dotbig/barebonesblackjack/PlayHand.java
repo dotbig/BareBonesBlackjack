@@ -6,6 +6,7 @@ import java.util.ArrayList;
 class PlayHand implements Hand {
     private List<Card> cards = new ArrayList<>();
     private int bet;
+    private boolean stay;
     private boolean bust;
     private boolean split;
 
@@ -46,6 +47,14 @@ class PlayHand implements Hand {
     public Card split(){
         split = true;
         return cards.remove(1);
+    }
+
+    public void stay(){
+        stay = true;
+    }
+
+    public boolean stayed(){
+        return stay;
     }
 
     public void bust(){
