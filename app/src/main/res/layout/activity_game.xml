@@ -10,9 +10,11 @@
         android:id="@+id/buttonReturnToMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="back to main"
-        tools:layout_editor_absoluteX="16dp"
-        tools:layout_editor_absoluteY="217dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/currencyBar"
@@ -223,24 +225,20 @@
 
     </LinearLayout>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="205dp" />
-
     <TextView
         android:id="@+id/textviewEventLog"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_weight=".7"
         android:gravity="bottom"
-        android:text="TextView"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonReturnToMain" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -260,20 +258,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight=".45"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textviewHandDealer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="300dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight=".8"
                 android:gravity="bottom|center"
                 android:text="dealerHand"
                 android:textSize="24sp"
@@ -290,10 +285,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginRight="8dp"
-                android:layout_weight=".2"
                 android:gravity="center"
                 android:text="dealerValue"
                 android:textSize="24sp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -308,7 +303,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight=".1"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
             app:layout_constraintEnd_toEndOf="parent"
@@ -317,10 +311,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight=".45"
-            android:orientation="vertical"
-            android:weightSum="1">
+            android:layout_height="350dp"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/textviewValuePlayer"
@@ -346,14 +338,14 @@
 
                 <TextView
                     android:id="@+id/textviewHandPlayer"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center"
+                    android:gravity="center|top"
                     android:text="playerHand"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/buttonBars"
@@ -362,14 +354,14 @@
 
                 <TextView
                     android:id="@+id/textviewHandPlayer2"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center"
+                    android:gravity="center|top"
                     android:text="playerHand"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/buttonBars"
@@ -378,14 +370,14 @@
 
                 <TextView
                     android:id="@+id/textviewHandPlayer3"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center"
+                    android:gravity="center|top"
                     android:text="playerHand"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/buttonBars"
@@ -394,19 +386,20 @@
 
                 <TextView
                     android:id="@+id/textviewHandPlayer4"
-                    android:layout_width="70dp"
+                    android:layout_width="80dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="8dp"
-                    android:gravity="center"
+                    android:gravity="center|top"
                     android:text="playerHand"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toTopOf="@+id/buttonBars"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
+
             </LinearLayout>
 
         </LinearLayout>

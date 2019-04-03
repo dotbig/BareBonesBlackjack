@@ -51,8 +51,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private StringBuilder events;
 
     private Shoe shoe;
-    private int shoeSize = 4;
-    private int penetration = 90;
+    private int shoeSize;
+    private int penetration;
+    //TODO: cards remaining counter
 
     private int bank;
     private int bet;
@@ -72,9 +73,23 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        Bundle gameBundle = getIntent().getExtras();
+        if (gameBundle != null){
+            shoeSize = gameBundle.getInt("shoeSize");
+            penetration = gameBundle.getInt("penetration");
+        } else {
+            shoeSize = 4;
+            penetration = 90;
+        }
+
+        System.out.println(shoeSize +"|"+penetration);
+
         initialiseUI();
 
         events = new StringBuilder();
+
+
 
         initialiseGameState();
     }
@@ -128,6 +143,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         gameResult = findViewById(R.id.textviewResult);
 
         eventLog = findViewById(R.id.textviewEventLog);
+
+        updateDealerInformation(dealerHand);
     }
 
     private void initialiseHandDisplays(){
@@ -237,7 +254,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void minimiseHandDisplay(TextView handDisplay){
-        handDisplay.setTextSize(20);
+        handDisplay.setTextSize(22);
     }
 
     private void maximiseHandDisplay(TextView handDisplay){
@@ -251,8 +268,13 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void updateDealerInformation(Hand hand){
-        dealerHandDisplay.setText(hand.toString());
-        dealerValueDisplay.setText(Integer.toString(hand.value()));
+        if (hand != null){
+            dealerHandDisplay.setText(hand.toString());
+            dealerValueDisplay.setText(Integer.toString(hand.value()));
+        } else {
+            dealerValueDisplay.setText("");
+            dealerHandDisplay.setText("");
+        }
     }
 
     private Hand getLastHand(List<Hand> hands, boolean active){
@@ -305,7 +327,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void bust(Hand hand){
-        log("Bust!");
+        log("Bust!\nLost your "+hand.getBet() +"\n");
         hand.bust();
         tryNextPlayerHand(hand);
     }
@@ -434,17 +456,17 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
         if (playerNatural) {
             if (dealerNatural) {
-                gameResult.setText("Natural push");
-                log("Natural push");
+                gameResult.setText("Push");
+                log("Push");
                 resolveHand(hand, Result.PUSH);
             } else {
-                gameResult.setText("Player natural wins");
-                log("Player natural wins");
+                gameResult.setText("Player natural");
+                log("Player natural");
                 resolveHand(hand, Result.WIN);
             }
         } else if (dealerNatural) {
-            gameResult.setText("Dealer natural wins");
-            log("Dealer natural wins");
+            gameResult.setText("Dealer natural");
+            log("Dealer natural");
             resolveHand(hand, Result.LOSS);
         } else if (dealerValue == -1) {
             gameResult.setText("Dealer bust!");
@@ -452,15 +474,15 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             resolveHand(hand, Result.WIN);
         } else if (dealerValue == playerValue){
             gameResult.setText("Push");
-            log("Push!");
+            log("Push");
             resolveHand(hand, Result.PUSH);
         } else if (dealerValue < playerValue){
-            gameResult.setText("Player wins!");
-            log("Player wins!");
+            gameResult.setText("Player win");
+            log("Player wins");
             resolveHand(hand, Result.WIN);
         } else {
-            gameResult.setText("Dealer wins!");
-            log("Dealer wins!");
+            gameResult.setText("Dealer win");
+            log("Dealer wins");
             resolveHand(hand, Result.LOSS);
         }
     }
@@ -476,22 +498,22 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 int winnings;
                 if (blackjack){
                     winnings = (int) (bet*1.5);
-                    message = "NATURAL; won "+Integer.toString(winnings);
+                    message = "Won "+Integer.toString(winnings) +"\n";
                 } else {
                     winnings = bet;
-                    message = "WIN; won "+Integer.toString(winnings);
+                    message = "Won "+Integer.toString(winnings)+"\n";
                 }
                 roi = bet + winnings;
                 break;
             case PUSH:
                 roi = bet;
-                message = "PUSH; returning your "+Integer.toString(bet);
+                message = "Returning your "+Integer.toString(bet)+"\n";
                 break;
             case LOSS:
-                message = "LOSS; lost your "+Integer.toString(bet);
+                message = "Lost your "+Integer.toString(bet)+"\n";
                 break;
             default:
-                message = "";
+                message = "\n";
         }
         increaseBank(roi);
         log(message);
@@ -565,6 +587,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         toggleBetButtons(false);
 
         clearHandDisplays();
+        //clear events
+        events.setLength(0);
+        updateEventLog();
 
         deal();
         //dealTest();
@@ -619,7 +644,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
         minimiseAllHandDisplays();
 
-        log("round over \n");
+        //log("round over \n");
+        //log("\n");
         showGameButtons(false);
         togglePlayButton(false);
         toggleBetButtons(true);
@@ -665,7 +691,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         int bet = hand.getBet();
         bank -= bet;
         hand.increaseBet(bet);
-        log("doubled down, hand's bet is now "+2*bet);
+        log("Doubled down");
         hit(hand);
         updatePlayerInformation(hand);
         if (justBusted(hand)){
@@ -681,6 +707,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         //hand.stayed();
         recoup = (int)(hand.getBet()/2);
         increaseBank(recoup);
+        log("Returned "+Integer.toString(recoup) +"\n");
         if (insuranceTaken()){
             revealDownCard();
             resolveInsurance();
@@ -741,7 +768,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         decreaseBank(max);
         insurance = max;
         toggleInsuranceDisplay(true);
-        log("took insurance of "+Integer.toString(insurance));
+        log("Insured "+Integer.toString(insurance));
     }
 
     private void toggleInsuranceDisplay(boolean enabled){
@@ -754,7 +781,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         int payout = stake + winnings;
         increaseBank(payout);
         toggleInsuranceDisplay(false);
-        log("paid insurance of "+Integer.toString(payout));
+        log("Insurance paid "+Integer.toString(payout));
     }
 
     private void toggleSplitButton(boolean enabled){
