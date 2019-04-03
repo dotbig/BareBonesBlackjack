@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array
+        name="shoe_sizes">
+        <item>2 decks</item>
+        <item>4 decks</item>
+        <item>6 decks</item>
+        <item>8 decks</item>
+    </string-array>
+    <string-array
+        name="penetration_values">
+        <item>50%</item>
+        <item>60%</item>
+        <item>70%</item>
+        <item>80%</item>
+    </string-array>
+</resources>
