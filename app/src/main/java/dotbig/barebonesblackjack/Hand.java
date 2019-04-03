@@ -7,6 +7,8 @@ interface Hand {
     void increaseBet(int amount);
     int count();
     int value();
+    void stay();
+    boolean stayed();
     void bust();
     boolean busted();
     Card split();
