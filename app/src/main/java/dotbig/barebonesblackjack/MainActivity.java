@@ -12,8 +12,7 @@ import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity implements
         OnClickListener,
-        ShoeSizeDialogFragment.ShoeDialogListener,
-        PenetrationDialogFragment.PenetrationDialogListener
+        SingleChoiceDialogListener
         {
 
     private Button startGameButton;
@@ -45,22 +44,53 @@ public class MainActivity extends AppCompatActivity implements
                 startGame();
                 break;
             case(R.id.buttonShoeSize):
-                DialogFragment shoeDialogFragment = new ShoeSizeDialogFragment();
-                shoeDialogFragment.show(getSupportFragmentManager(), "shoeSize");
+                showSingleChoiceDialogFragment(
+                        R.string.shoe_size_select_title,
+                        R.array.shoe_sizes,
+                        "shoeSize");
                 break;
             case(R.id.buttonPenetration):
-                DialogFragment penDialogFragment = new PenetrationDialogFragment();
-                penDialogFragment.show(getSupportFragmentManager(), "penetration");
+                showSingleChoiceDialogFragment(
+                        R.string.penetration_select_title,
+                        R.array.penetration_values,
+                        "penetration");
                 break;
         }
     }
 
-    private void setNumberOfDecks(int decks){
+    private void showSingleChoiceDialogFragment(int titleID, int itemsID, String tag){
+        Bundle args = new Bundle();
+        args.putInt("title", titleID);
+        args.putInt("items", itemsID);
+
+        DialogFragment singleChoiceDialogFragment = new SingleChoiceDialogFragment();
+        singleChoiceDialogFragment.setArguments(args);
+        singleChoiceDialogFragment.show(getSupportFragmentManager(), tag);
+    }
+
+    private void selectShoeSize(int which){
+        switch(which){
+            case(0):
+                setShoeSize(2);
+                break;
+            case(1):
+                setShoeSize(4);
+                break;
+            case(2):
+                setShoeSize(6);
+                break;
+            case(3):
+                setShoeSize(8);
+                break;
+        }
+    }
+
+    private void setShoeSize(int decks){
         shoeSize = decks;
         updateShoeSizeDisplay();
     }
 
-    private int getNumberOfDecks(){
+    private int getShoeSize(){
         return 0;
     }
 
@@ -68,9 +98,26 @@ public class MainActivity extends AppCompatActivity implements
         shoeSizeButton.setText(Integer.toString(shoeSize)+" decks");
     }
 
-    private void setPenetration(int pen){
-        if (pen > maxPenetration(getNumberOfDecks())){
-            penetration = maxPenetration(getNumberOfDecks());
+    private void selectPenetration(int which){
+        switch(which){
+            case(0):
+                setPenetration(50);
+                break;
+            case(1):
+                setPenetration(60);
+                break;
+            case(2):
+                setPenetration(70);
+                break;
+            case(3):
+                setPenetration(80);
+                break;
+        }
+    }
+
+    private void validatePenetration(int pen){
+        if (pen > maxPenetration(getShoeSize())){
+            penetration = maxPenetration(getShoeSize());
         } else {
             penetration = pen;
         }
@@ -89,48 +136,26 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
+    private void setPenetration(int pen){
+        penetration = pen;
+        updatePenetrationDisplay();
+    }
+
     private void updatePenetrationDisplay(){
         penetrationButton.setText(Integer.toString(penetration)+"%");
     }
 
-    private int getPenetration(){
-        return penetration;
-    }
-
-    public void onShoeSizeSelect(DialogFragment dialog, int which){
-        switch(which){
-            case(0):
-                setNumberOfDecks(2);
+    public void onChoiceSelect(DialogFragment dialog, int which){
+        String tag = dialog.getTag();
+        System.out.println(tag);
+        switch(tag){
+            case("shoeSize"):
+                System.out.println("case shoeSize");
+                selectShoeSize(which);
                 break;
-            case(1):
-                setNumberOfDecks(4);
-                break;
-            case(2):
-                setNumberOfDecks(6);
-                break;
-            case(3):
-                setNumberOfDecks(8);
-                break;
-        }
-    }
-
-    public void onPenetrationSelect(DialogFragment dialog, int which){
-        switch(which){
-            case(0):
-                penetration = 50;
-                updatePenetrationDisplay();
-                break;
-            case(1):
-                penetration = 60;
-                updatePenetrationDisplay();
-                break;
-            case(2):
-                penetration = 70;
-                updatePenetrationDisplay();
-                break;
-            case(3):
-                penetration = 80;
-                updatePenetrationDisplay();
+            case("penetration"):
+                System.out.println("case pen");
+                selectPenetration(which);
                 break;
         }
     }
@@ -147,12 +172,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     private void startGame(){
-        Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
-
         Bundle gameBundle = new Bundle();
         gameBundle.putInt("shoeSize", shoeSize);
         gameBundle.putInt("penetration", penetration);
 
+        Intent gameIntent = new Intent(MainActivity.this, GameActivity.class);
         gameIntent.putExtras(gameBundle);
 
         startActivity(gameIntent);

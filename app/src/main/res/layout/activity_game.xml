@@ -56,7 +56,6 @@
                 android:text="bet"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
-                app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintHorizontal_bias="0.505"
                 app:layout_constraintStart_toStartOf="parent" />
 
@@ -89,8 +88,7 @@
                 android:text="bank"
                 android:textAlignment="center"
                 app:layout_constraintBottom_toTopOf="@+id/textviewValuePlayer"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/guideline" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </LinearLayout>
 
