@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Bare Bones Blackjack</string>
+    <string name="shoe_size_select_title">Choose number of decks</string>
+    <string name="penetration_select_title">Choose penetration value</string>
 </resources>
