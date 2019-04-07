@@ -3,21 +3,21 @@ package dotbig.barebonesblackjack;
 import java.util.ArrayList;
 import java.util.List;
 
-class StandardDeck implements Deck {
-    private List<Card> cards = new ArrayList<>();
+public class DeckBlackjack implements Deck {
+    private List<BlackjackCard> cards = new ArrayList<>();
 
-    StandardDeck(){
+    DeckBlackjack(){
         populateDeck();
     }
 
-    public List<Card> getDeck(){
+    public List<BlackjackCard> getDeck(){
         return cards;
     }
 
     private void populateDeck(){
         for (int s=0; s<4; s++){
             for (int r=0; r<13; r++){
-                Card c = new PlayingCard(s, r);
+                BlackjackCard c = new CardBlackjack(s, r);
                 cards.add(c);
             }
         }
@@ -26,5 +26,4 @@ class StandardDeck implements Deck {
     public int count(){
         return cards.size();
     }
-
 }
