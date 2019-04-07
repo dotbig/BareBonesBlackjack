@@ -161,21 +161,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="20" />
+                android:text="bet1" />
 
             <Button
                 android:id="@+id/buttonBet2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="50" />
+                android:text="bet2" />
 
             <Button
                 android:id="@+id/buttonBet3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="100" />
+                android:text="bet3" />
 
         </LinearLayout>
 
