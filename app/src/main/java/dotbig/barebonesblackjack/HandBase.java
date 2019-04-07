@@ -1,60 +1,18 @@
 package dotbig.barebonesblackjack;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
-class PlayHand implements Hand {
-    private List<Card> cards = new ArrayList<>();
-    private int bet;
-    private boolean stay;
+public abstract class HandBase implements BlackjackHand {
+    List<BlackjackCard> cards = new ArrayList<>();
     private boolean bust;
-    private boolean split;
 
-    PlayHand(){
-        
-    }
-
-    PlayHand(int stake){
-        bet = stake;
-    }
-
-    PlayHand(int stake, Card card){
-        bet = stake;
-        split = true;
+    public void add(BlackjackCard card){
         cards.add(card);
     }
 
-    public void hit(Card draw){
-        cards.add(draw);
-    }
-
-    public Card getCard(int index){
+    public BlackjackCard getCard(int index){
         return cards.get(index);
-    }
-
-    public int getBet(){
-        return bet;
-    }
-
-    public void increaseBet(int amount){
-        bet += amount;
-    }
-
-    public boolean isSplit(){
-        return split;
-    }
-
-    public Card split(){
-        split = true;
-        return cards.remove(1);
-    }
-
-    public void stay(){
-        stay = true;
-    }
-
-    public boolean stayed(){
-        return stay;
     }
 
     public void bust(){
@@ -69,43 +27,13 @@ class PlayHand implements Hand {
         return cards.size();
     }
 
-    public int value(){
-        int aces = numberOfAces();
-        int sansAces = valueWithoutAces();
-        int value = valueOptimal(aces, sansAces);
-
-        return value;
-    }
-
-    public boolean natural(){
-        if (count() == 2 && value() == 21 && !split) {
-            return true;
-        } else return false;
-    }
-
-    public boolean softSeventeen(){
-        int aces = numberOfAces();
-        int sansAces = valueWithoutAces();
-        int hard = valueHard();
-        if (aces == 1){
-            if (sansAces == 6){
-                return true;
-            } else return false;
-        } else if (aces > 1) {
-            if ((hard - 1) == 6){
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void clear(){
         cards.clear();
     }
 
     public String toString(){
         StringBuilder currentHand = new StringBuilder();
-        for (Card c : cards){
+        for (BlackjackCard c : cards){
             if (!c.isFaceUp()){
                 currentHand.append("??\n");
             } else {
@@ -115,9 +43,17 @@ class PlayHand implements Hand {
         return currentHand.toString();
     }
 
-    private int numberOfAces() {
+    public int value(){
+        int aces = numberOfAces();
+        int sansAces = valueWithoutAces();
+        int value = valueOptimal(aces, sansAces);
+
+        return value;
+    }
+
+    int numberOfAces() {
         int aces = 0;
-        for (Card c : cards){
+        for (BlackjackCard c : cards){
             if (c.isAce()){
                 aces++;
             }
@@ -125,18 +61,14 @@ class PlayHand implements Hand {
         return aces;
     }
 
-    private int valueWithoutAces() {
+    int valueWithoutAces() {
         int runningTotal = 0;
-        for (Card c : cards) {
+        for (BlackjackCard c : cards) {
             if (c.getValue() != 1){
                 runningTotal += c.getValue();
             }
         }
         return runningTotal;
-    }
-
-    private int valueHard(){
-        return numberOfAces() + valueWithoutAces();
     }
 
     private int valueOptimal(int numAces, int valWithoutAces){

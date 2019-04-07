@@ -1,11 +1,11 @@
 package dotbig.barebonesblackjack;
 
-class PlayingCard implements Card {
+public class CardBlackjack implements BlackjackCard {
     private Suit suit;
     private Rank rank;
     private boolean faceUp;
 
-    PlayingCard(int suit, int rank){
+    CardBlackjack(int suit, int rank){
         faceUp = true;
         switch(suit){
             case 0:
@@ -98,5 +98,4 @@ class PlayingCard implements Card {
     public String toString(){
         return rank.getRank()+suit.getSuit();
     }
-
 }
