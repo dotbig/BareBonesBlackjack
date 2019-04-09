@@ -12,12 +12,42 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="back to main"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/insuranceLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="55dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/playerHands"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/insuranceValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="value"
+            android:text="ins"
+            android:textAlignment="textEnd"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/insuranceLabel"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Insurance"
+            android:textAlignment="textEnd"
+            android:textSize="22sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bankLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -28,26 +58,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textViewBankLabel"
-            android:layout_width="match_parent"
+            android:id="@+id/bankLabel"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_weight="0.5"
             android:text="Bank"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textSize="30sp" />
 
         <TextView
-            android:id="@+id/textviewBank"
+            android:id="@+id/bankValue"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:layout_weight="0.5"
+            android:tag="value"
             android:text="bank"
-            android:textAlignment="center"
+            android:textAlignment="textEnd"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -207,7 +233,7 @@
     <TextView
         android:id="@+id/textviewHandDealer"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="250dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -219,7 +245,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonReturnToMain" />
 
     <LinearLayout
         android:id="@+id/playerHands"
@@ -246,10 +272,10 @@
 
             <TextView
                 android:id="@+id/handDisplay1"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center|top"
+                android:gravity="bottom|center"
                 android:scrollHorizontally="true"
                 android:tag="cards"
                 android:text="hand"
@@ -287,10 +313,10 @@
 
             <TextView
                 android:id="@+id/handDisplay2"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center|top"
+                android:gravity="bottom|center"
                 android:scrollHorizontally="true"
                 android:tag="cards"
                 android:text="hand"
@@ -328,10 +354,10 @@
 
             <TextView
                 android:id="@+id/handDisplay3"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center|top"
+                android:gravity="bottom|center"
                 android:scrollHorizontally="true"
                 android:tag="cards"
                 android:text="hand"
@@ -369,10 +395,10 @@
 
             <TextView
                 android:id="@+id/handDisplay4"
-                android:layout_width="95dp"
+                android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginBottom="8dp"
-                android:gravity="center|top"
+                android:gravity="bottom|center"
                 android:scrollHorizontally="true"
                 android:tag="cards"
                 android:text="hand"
@@ -400,6 +426,34 @@
 
         </android.support.constraint.ConstraintLayout>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/remainingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/remainingLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cards"
+            android:textAlignment="textStart"
+            android:textSize="30sp" />
+
+        <TextView
+            android:id="@+id/remainingValue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="value"
+            android:text="cards"
+            android:textAlignment="textStart"
+            android:textSize="30sp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
