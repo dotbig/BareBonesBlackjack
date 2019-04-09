@@ -3,8 +3,6 @@ package dotbig.barebonesblackjack;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.CardView;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -38,15 +36,10 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private LinearLayout contextBar;
     private LinearLayout playBar;
     private LinearLayout hitStayBar;
-    private LinearLayout currencyBar;
-    //information displays
-    //private TextView playerHandDisplay;
-    //private TextView playerHandDisplay2;
-    //private TextView playerHandDisplay3;
-    //private TextView playerHandDisplay4;
 
+    private HandDisplay dealerDisplay;
     private TextView dealerHandDisplay;
-    private TextView bankDisplay;
+    private DisplayGroupText bankDisplay;
 
     private TextView eventLog;
     private StringBuilder events;
@@ -59,6 +52,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private int bank;
     private int bet;
     private int insurance;
+    DisplayGroupText insuranceDisplay;
+    DisplayGroupText cardsRemainingDisplay;
 
     private int betValue1;
     private int betValue2;
@@ -92,13 +87,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             penetration = 90;
         }
 
-        System.out.println(shoeSize +"|"+penetration);
-
+        events = new StringBuilder();
         initialiseBetValues(20, 50, 100);
         initialiseUI();
-
-        events = new StringBuilder();
-
         initialiseGameState();
     }
 
@@ -135,13 +126,14 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         contextBar = findViewById(R.id.barContextuals);
         playBar = findViewById(R.id.barPlay);
         hitStayBar = findViewById(R.id.barHitStay);
-        //displays for current bet and player funds
-        bankDisplay = findViewById(R.id.textviewBank);
-        //text displays
+
         //dealer hand information
         dealerHandDisplay = findViewById(R.id.textviewHandDealer);
 
-        //player hand information
+        bankDisplay = new DisplayGroupText((LinearLayout)findViewById(R.id.bankLayout));
+        cardsRemainingDisplay = new DisplayGroupText((LinearLayout)findViewById(R.id.remainingLayout));
+        insuranceDisplay = new DisplayGroupText((LinearLayout)findViewById(R.id.insuranceLayout));
+
         initialiseHandDisplays();
 
 
@@ -236,13 +228,13 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void initialiseGameState(){
         bank = 300;
         bet = 0;
-
         updateBankDisplay();
 
         initialiseShoe();
 
         updatePlayButton();
         toggleBetButtons(true);
+        toggleInsuranceDisplay(false);
     }
 
     private void updatePlayerInformation(BlackjackHandPlayer hand){
@@ -471,13 +463,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    private void resolveInsurance(){
-        if (natural(dealerHand)) {
-            payInsurance();
-        } else {
-            log("Lost your insurance");
-        }
-    }
+
 
     private void dealerTurn(boolean playerNatural){
         //decide whether or not to reveal the face down card
@@ -532,12 +518,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         int playerValue = hand.value();
         boolean dealerNatural = dealerHand.natural();
         boolean playerNatural = hand.natural();
-
-        //if (dealerValue == -1){
-        //    log(Integer.toString(playerValue)+" vs bust");
-        //} else {
-        //    log(Integer.toString(playerValue)+" vs "+Integer.toString(dealerValue));
-        //}
 
         if (playerNatural) {
             if (dealerNatural) {
@@ -597,6 +577,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         }
         shoe.setPenetration(penetration);
         shoe.shuffle();
+        updateCardsRemainingDisplay();
     }
 
     private void initialiseHands(){
@@ -631,10 +612,12 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     private void hit(BlackjackHand hand){
         hand.add(shoe.draw());
+        updateCardsRemainingDisplay();
     }
 
     private void hitFaceDown(BlackjackHand hand){
         hand.add(shoe.draw(false));
+        updateCardsRemainingDisplay();
     }
 
     private void hitPlayer(BlackjackHandPlayer hand) {
@@ -658,6 +641,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         toggleBetButtons(false);
 
         clearHandDisplays();
+        toggleInsuranceDisplay(false);
         //clear events
         events.setLength(0);
         updateEventLog();
@@ -673,7 +657,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         firstTurnOptionsCheck();
         if (natural(currentPlayerHand)){
             if (allowEvenMoney(currentPlayerHand)) {
-                activateEvenMoney(currentPlayerHand);
+                offerEvenMoney(currentPlayerHand);
             } else {
                 dealerTurn(true);
             }
@@ -815,7 +799,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         surrenderButton.setEnabled(enabled);
     }
 
-    private void activateEvenMoney(BlackjackHandPlayer hand){
+    private void offerEvenMoney(BlackjackHandPlayer hand){
         toggleHitButton(false);
         toggleDoubleDownButton(false);
         toggleSurrenderButton(false);
@@ -846,10 +830,42 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         decreaseBank(max);
         insurance = max;
         toggleInsuranceDisplay(true);
-        log("Insured "+Integer.toString(insurance));
+        updateInsuranceStake();
+        //log("Insured "+Integer.toString(insurance));
     }
 
     private void toggleInsuranceDisplay(boolean enabled){
+        if (enabled){
+            insuranceDisplay.setVisibility(View.VISIBLE);
+        } else {
+            insuranceDisplay.setVisibility(View.GONE);
+        }
+    }
+
+    private void updateInsuranceStake(){
+        insuranceDisplay.setValue("value", Integer.toString(insurance));
+    }
+
+    private void updateInsuranceOutcome(int net){
+        if (net > 0){
+            insuranceDisplay.setValue("value", String.format(Locale.ENGLISH, "+%d", net));
+        } else {
+            insuranceDisplay.setValue("value", String.format(Locale.ENGLISH, "%d", net));
+        }
+    }
+
+    private boolean insuranceWon(){
+        return natural(dealerHand);
+    }
+
+    private void resolveInsurance(){
+        if (insuranceWon()) {
+            payInsurance();
+            updateInsuranceOutcome(calculateNetInsurance(true));
+        } else {
+            //log("Lost your insurance");
+            updateInsuranceOutcome(calculateNetInsurance(false));
+        }
 
     }
 
@@ -858,8 +874,18 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         int winnings = insurance*2;
         int payout = stake + winnings;
         increaseBank(payout);
-        toggleInsuranceDisplay(false);
-        log("Insurance paid "+Integer.toString(payout));
+        //log("Insurance paid "+Integer.toString(payout));
+    }
+
+    private int calculateNetInsurance(boolean win){
+        int stake = insurance;
+        int net = 0;
+        if (win){
+            net = 2*stake;
+        } else {
+            net -= stake;
+        }
+        return net;
     }
 
     private void toggleSplitButton(boolean enabled){
@@ -887,6 +913,14 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return card.getValue();
     }
 
+    private int cardsRemaining(){
+        return shoe.count();
+    }
+
+    private void updateCardsRemainingDisplay(){
+        cardsRemainingDisplay.setValue("value", Integer.toString(cardsRemaining()));
+    }
+
     private void increaseBank(int amount){
         bank += amount;
         updateBankDisplay();
@@ -898,7 +932,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void updateBankDisplay(){
-        bankDisplay.setText(Integer.toString(bank));
+        bankDisplay.setValue("value", Integer.toString(bank));
     }
 
     private void toggleGameButtons(boolean enabled){
