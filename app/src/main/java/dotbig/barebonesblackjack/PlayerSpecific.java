@@ -1,6 +1,6 @@
 package dotbig.barebonesblackjack;
 
-public interface BlackjackHandPlayer extends BlackjackHand {
+public interface PlayerSpecific extends Hand {
     int getBet();
     void increaseBet(int amount);
     void stay();

@@ -3,7 +3,7 @@ package dotbig.barebonesblackjack;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class HandBase implements BlackjackHand {
+public abstract class HandBase implements Hand {
     List<BlackjackCard> cards = new ArrayList<>();
     private boolean bust;
 
@@ -12,7 +12,12 @@ public abstract class HandBase implements BlackjackHand {
     }
 
     public BlackjackCard getCard(int index){
-        return cards.get(index);
+        //TODO: validate we have a card
+        BlackjackCard card;
+        if (index >= 0 && index <= cards.size()-1){
+            card = cards.get(index);
+            return card;
+        } else return null;
     }
 
     public void bust(){
@@ -31,16 +36,16 @@ public abstract class HandBase implements BlackjackHand {
         cards.clear();
     }
 
-    public String toString(){
-        StringBuilder currentHand = new StringBuilder();
+    public String string(){
+        StringBuilder builder = new StringBuilder();
         for (BlackjackCard c : cards){
             if (!c.isFaceUp()){
-                currentHand.append("??\n");
+                builder.append("??\n");
             } else {
-                currentHand.append(c.toString()+"\n");
+                builder.append(c.string()+"\n");
             }
         }
-        return currentHand.toString();
+        return builder.toString();
     }
 
     public int value(){
@@ -64,8 +69,8 @@ public abstract class HandBase implements BlackjackHand {
     int valueWithoutAces() {
         int runningTotal = 0;
         for (BlackjackCard c : cards) {
-            if (c.getValue() != 1){
-                runningTotal += c.getValue();
+            if (c.value() != 1){
+                runningTotal += c.value();
             }
         }
         return runningTotal;
