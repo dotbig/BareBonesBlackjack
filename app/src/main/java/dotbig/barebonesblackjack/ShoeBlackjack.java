@@ -3,7 +3,7 @@ package dotbig.barebonesblackjack;
 import java.util.Collections;
 import java.util.Stack;
 
-public class ShoeBlackjack implements BlackjackShoe {
+public class ShoeBlackjack implements Shoe {
     private Stack<BlackjackCard> stack = new Stack<>();
     private int capacity;
     private int penetration;

@@ -79,7 +79,7 @@ public class CardBlackjack implements BlackjackCard {
         return rank.getRank();
     }
 
-    public int getValue(){
+    public int value(){
         return rank.getValue();
     }
 
@@ -95,7 +95,7 @@ public class CardBlackjack implements BlackjackCard {
         this.faceUp = faceUp;
     }
 
-    public String toString(){
+    public String string(){
         return rank.getRank()+suit.getSuit();
     }
 }

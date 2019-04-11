@@ -1,6 +1,9 @@
 package dotbig.barebonesblackjack;
 
-public class HandDealer extends HandBase implements BlackjackHandDealer {
+public class HandDealer extends HandBase implements DealerSpecific {
+
+    private final int UP = 0;
+    private final int HOLE = 1;
 
     HandDealer(){
 
@@ -10,6 +13,18 @@ public class HandDealer extends HandBase implements BlackjackHandDealer {
         if (count() == 2 && value() == 21) {
             return true;
         } else return false;
+    }
+
+    public BlackjackCard getUpCard(){
+        return getCard(UP);
+    }
+
+    public BlackjackCard getHoleCard(){
+        return getCard(HOLE);
+    }
+
+    public void reveal(){
+        getHoleCard().flip(true);
     }
 
     public boolean softSeventeen(){

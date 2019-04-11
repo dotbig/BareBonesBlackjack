@@ -1,6 +1,6 @@
 package dotbig.barebonesblackjack;
 
-public class HandPlayer extends HandBase implements BlackjackHandPlayer {
+public class HandPlayer extends HandBase implements PlayerSpecific {
     private int bet;
     private boolean stay;
     private boolean split;
