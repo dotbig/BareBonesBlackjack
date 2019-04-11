@@ -11,12 +11,10 @@ public abstract class HandBase implements Hand {
         cards.add(card);
     }
 
+    //returns null if we reach out of bounds
     public BlackjackCard getCard(int index){
-        //TODO: validate we have a card
-        BlackjackCard card;
         if (index >= 0 && index <= cards.size()-1){
-            card = cards.get(index);
-            return card;
+            return cards.get(index);
         } else return null;
     }
 
@@ -36,24 +34,8 @@ public abstract class HandBase implements Hand {
         cards.clear();
     }
 
-    public String string(){
-        StringBuilder builder = new StringBuilder();
-        for (BlackjackCard c : cards){
-            if (!c.isFaceUp()){
-                builder.append("??\n");
-            } else {
-                builder.append(c.string()+"\n");
-            }
-        }
-        return builder.toString();
-    }
-
     public int value(){
-        int aces = numberOfAces();
-        int sansAces = valueWithoutAces();
-        int value = valueOptimal(aces, sansAces);
-
-        return value;
+        return valueOptimal(numberOfAces(), valueWithoutAces());
     }
 
     int numberOfAces() {
@@ -76,36 +58,36 @@ public abstract class HandBase implements Hand {
         return runningTotal;
     }
 
+    /*
+    returns the highest value of the hand without busting, accounting for aces
+    if bust is unavoidable, returns -1
+
+    since aces can be worth 1 or 11, if we have any aces then we need to determine which
+    combination of ace values added to our running total will give us the best hand
+
+    we'll need to remember the value of each unique combination of ace values.
+    for n aces there's n+1 possible unique combinations of ace values
+        1 ace:  {(1),
+                 (11)}
+
+        2 aces: {(1, 1),
+                 (1, 11),
+                 (11, 11)}
+
+        3 aces: {(1, 1, 1),
+                 (1, 1, 11),
+                 (1, 11, 11),
+                 (11, 11, 11)}
+
+        to find the value of a combination we can use
+          value = A*1 + B*11
+              where A is the number of aces with value 1 and B is the number of aces with value 11
+
+          start with A = numberOfAces and B = 0
+          decrement A and increment B; total number of aces stays the same
+          when A = 0 and B = numberOfAces we've gone through all unique combinations
+     */
     private int valueOptimal(int numAces, int valWithoutAces){
-        /*
-        returns the highest value of the hand without busting, accounting for aces
-        if bust is unavoidable, returns -1
-
-        since aces can be worth 1 or 11, if we have any aces then we need to determine which
-          combination of ace values added to our running total will give us the best hand
-
-          we'll need to remember the value of each unique combination of ace values.
-          for n aces there's n+1 possible unique combinations of ace values
-              1 ace:  {(1),
-                       (11)}
-
-              2 aces: {(1, 1),
-                       (1, 11),
-                       (11, 11)}
-
-              3 aces: {(1, 1, 1),
-                       (1, 1, 11),
-                       (1, 11, 11),
-                       (11, 11, 11)}
-
-              to find the value of a combination we can use
-                value = A*1 + B*11
-                    where A is the number of aces with value 1 and B is the number of aces with value 11
-
-                start with A = numberOfAces and B = 0
-                decrement A and increment B; total number of aces stays the same
-                when A = 0 and B = numberOfAces we've gone through all unique combinations
-        */
         int result = -1;
         if (numAces > 0){
             int[] combinations = new int[numAces + 1];
@@ -132,5 +114,17 @@ public abstract class HandBase implements Hand {
                 result = valWithoutAces;
             }
         return result;
+    }
+
+    public String string(){
+        StringBuilder builder = new StringBuilder();
+        for (BlackjackCard c : cards){
+            if (!c.isFaceUp()){
+                builder.append("??\n");
+            } else {
+                builder.append(c.string()+"\n");
+            }
+        }
+        return builder.toString();
     }
 }
