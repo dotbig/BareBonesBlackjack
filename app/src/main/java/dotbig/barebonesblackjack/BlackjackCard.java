@@ -1,6 +1,6 @@
 package dotbig.barebonesblackjack;
 
-public interface BlackjackCard extends Card {
-    int getValue();
+public interface BlackjackCard extends Card,
+                                       Valuable {
     boolean isAce();
 }
