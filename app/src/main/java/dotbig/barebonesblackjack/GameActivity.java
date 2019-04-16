@@ -1,11 +1,13 @@
 package dotbig.barebonesblackjack;
 
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -92,6 +94,83 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         initialiseGameState();
     }
 
+
+
+    private void addCardToDisplay(ConstraintLayout group, Card card){
+        //find image for a given card
+        int res = CardImage.findImage(card, getApplicationContext());
+
+        ImageView newCard = new ImageView(getApplicationContext());
+        group.addView(newCard);
+
+        int parentWidth = group.getWidth();
+        System.out.println(parentWidth);
+        System.out.println(group.getWidth());
+
+        newCard.setId(View.generateViewId());
+        newCard.setImageResource(res);
+
+        newCard.setAdjustViewBounds(true);
+        newCard.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        //newCard.setMaxWidth(parentWidth);
+
+        //resizing
+        int children = group.getChildCount();
+        /*
+        ideally, cards take up the entire width of the container.
+        we want to show 15% of the card beneath, to see it's rank.
+        this means marginSize = 0.15 * cardWidth
+
+        the ideal card size is found by
+            idealWidth = parentWidth - numberOfCards * marginSize
+
+        since marginSize = 0.15 * idealWidth, we get
+            idealWidth = parentWidth - numberOfCards * (0.15 * idealWidth)
+
+        solving for idealWidth gives us
+            idealWidth = parentSize/((0.15 * numberOfCards) + 1)
+         */
+        int idealWidth;
+        //apply size to all children
+        if (children > 1){
+            idealWidth = (int)(parentWidth/(0.15*children+1));
+        } else {
+            idealWidth = parentWidth;
+        }
+        System.out.println("idealWidth: "+idealWidth);
+
+        for (int i=0; i<children; i++){
+            ImageView child = (ImageView)group.getChildAt(i);
+            child.setMaxWidth(idealWidth);
+        }
+
+        ConstraintSet constraints = new ConstraintSet();
+        constraints.clone(group);
+        if (group.getChildCount() <= 1){
+            //if this is the first child added, constrain to the group itself
+            constraints.connect(newCard.getId(), ConstraintSet.LEFT,
+                                ConstraintSet.PARENT_ID, ConstraintSet.LEFT);
+            constraints.connect(newCard.getId(), ConstraintSet.BOTTOM,
+                                ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        } else {
+            //if its not the first child, constrain to the previous child
+            int wMargin = (int)(group.getChildAt(0).getWidth()*0.15);
+            int hMargin = (int)(group.getChildAt(0).getHeight()*0.15);
+
+            for (int i=children-1; i>=1; i--){
+                int current = group.getChildAt(i).getId();
+                int elder = group.getChildAt(i-1).getId();
+
+                constraints.connect(current, ConstraintSet.LEFT,
+                        elder, ConstraintSet.LEFT, wMargin);
+                constraints.connect(current, ConstraintSet.BOTTOM,
+                        elder, ConstraintSet.BOTTOM, hMargin);
+            }
+        }
+        newCard.bringToFront();
+        constraints.applyTo(group);
+    }
+
     private void initialiseUI(){
         //individual buttons
         returnButton = findViewById(R.id.buttonReturnToMain);
@@ -141,6 +220,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         updateDealerInformation();
         updateBetButtonText();
 
+        Button buttonTest = findViewById(R.id.buttonTest);
+        buttonTest.setOnClickListener(this);
+
     }
 
     private void initialiseBetValues(int betValue1, int betValue2, int betValue3) {
@@ -182,34 +264,42 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             case (R.id.buttonReturnToMain):
                 finish();
                 break;
+
             case (R.id.buttonHit):
                 disableFirstTurnOptions();
                 hitPlayer(currentPlayerHand);
                 break;
+
             case (R.id.buttonStay):
                 disableFirstTurnOptions();
                 stay(currentPlayerHand);
                 break;
+
             case (R.id.buttonPlay):
                 play();
                 break;
+
             case (R.id.buttonBet1):
                 increaseBet(20);
                 break;
+
             case (R.id.buttonBet2):
                 increaseBet(50);
                 break;
             case (R.id.buttonBet3):
                 increaseBet(100);
                 break;
+
             case (R.id.buttonDoubleDown):
                 disableFirstTurnOptions();
                 doubleDown(currentPlayerHand);
                 break;
+
             case (R.id.buttonSplit):
                 disableFirstTurnOptions();
                 split(currentPlayerHand);
                 break;
+
             case (R.id.buttonInsurance):
                 toggleButton(insuranceButton, false);
                 insurance(currentPlayerHand);
@@ -217,9 +307,19 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                     stay(currentPlayerHand);
                 }
                 break;
+
             case (R.id.buttonSurrender):
                 surrender(currentPlayerHand);
                 break;
+
+            case (R.id.buttonTest):
+                ConstraintLayout test = findViewById(R.id.constraintTest);
+
+                BlackjackCard testCard = new CardBlackjack(0,0);
+                System.out.println(testCard.string());
+                addCardToDisplay(test, testCard);
+                //addCardToDisplay(test, testCard);
+                //addCardToDisplay(test, testCard);
         }
     }
 
