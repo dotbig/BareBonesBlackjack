@@ -9,14 +9,20 @@ final class CardImage {
 
     static int findImage(Card card, Context context){
         Resources res = context.getResources();
-        String file = getFileName(card);
-        int id = res.getIdentifier(file, "drawable", context.getPackageName());
+        String fileName = getFileName(card);
+        int id = res.getIdentifier(fileName, "drawable", context.getPackageName());
+        if (id == 0){
+            return res.getIdentifier("face_down", "drawable", context.getPackageName());
+        }
         return id;
     }
 
     //filenames will be ace_hearts, jack_spades etc
     //this function takes a card and returns a string corresponding to the filename required
     static private String getFileName(Card card){
+        if (!card.isFaceUp()){
+            return "face_down";
+        }
         String rank;
         String suit;
         switch(card.getRank()){
@@ -81,7 +87,6 @@ final class CardImage {
                 suit = "joker";
                 break;
         }
-
         String fileName = rank + "_" + suit;
         return fileName;
     }
