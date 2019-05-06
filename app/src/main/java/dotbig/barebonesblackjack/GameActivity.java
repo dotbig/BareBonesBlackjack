@@ -294,7 +294,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         toggleInsuranceDisplay(false);
     }
 
-
     private ImageView createCardView(Card card){
         //set up new imageview
         ImageView newCardView = new ImageView(getApplicationContext());
@@ -317,11 +316,11 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         the ideal card size is found by
             idealWidth = parentWidth - numberOfCards * marginSize
 
-        since marginSize = 0.15 * idealWidth, we get
-            idealWidth = parentWidth - numberOfCards * (0.15 * idealWidth)
+        since marginSize = marginProportion * idealWidth, we get
+            idealWidth = parentWidth - numberOfCards * (marginProportion * idealWidth)
 
         solving for idealWidth gives us
-            idealWidth = parentSize/((0.15 * numberOfCards) + 1)
+            idealWidth = parentSize/((marginProportion * numberOfCards) + 1)
          */
 
         int children = group.getChildCount();
@@ -392,18 +391,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             int current;
             int elder;
             if (i == 0){
-                int offset = 0;
-                //TODO: delete duplicate code
-                if (player){
-                    if (playerHands.size() == 1){
-                        //offset = children*(marginLeft/2);
-                        offset = children*marginLeft;
-                    } else {
-                        offset = children*marginLeft;
-                    }
-                } else {
-                    offset = (children)*(marginLeft);
-                }
+                //offset the first card depending on how many cards there are,
+                //ensures the whole stack remains mostly centered
+                int offset = children*marginLeft;
 
                 current = group.getChildAt(0).getId();
                 elder = ConstraintSet.PARENT_ID;
