@@ -71,12 +71,12 @@ public class CardBlackjack implements BlackjackCard {
         }
     }
 
-    public String getSuit() {
-        return suit.getSuit();
+    public Suit getSuit() {
+        return suit;
     }
 
-    public String getRank(){
-        return rank.getRank();
+    public Rank getRank(){
+        return rank;
     }
 
     public int value(){

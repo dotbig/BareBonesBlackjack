@@ -3,8 +3,8 @@ package dotbig.barebonesblackjack;
 public class HandDealer extends HandBase implements DealerSpecific {
 
     //indexes of the hole card and up card
-    private final int UP = 0;
-    private final int HOLE = 1;
+    private final int UP = 1;
+    private final int HOLE = 0;
 
     HandDealer(){
 

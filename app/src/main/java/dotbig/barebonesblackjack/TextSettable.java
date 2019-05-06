@@ -1,5 +1,5 @@
 package dotbig.barebonesblackjack;
 
 public interface TextSettable {
-    void setText(String tag, CharSequence text);
+    void setText(CharSequence text);
 }

@@ -4,13 +4,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class ViewGroupWrapper implements TextSettable,
+public class InfoDisplayGroup implements TextSettable,
                                         VisibilitySettable,
                                         AlphaSettable {
+    ViewGroup group;
 
-    private ViewGroup group;
-
-    ViewGroupWrapper(ViewGroup group){
+    InfoDisplayGroup(ViewGroup group){
         this.group = group;
     }
 
@@ -18,8 +17,8 @@ public class ViewGroupWrapper implements TextSettable,
         group.setVisibility(visibility);
     }
 
-    public void setText(String tag, CharSequence text){
-        View viewWithTag = group.findViewWithTag(tag);
+    public void setText(CharSequence text){
+        View viewWithTag = group.findViewWithTag("text");
         if (viewWithTag instanceof TextView){
             TextView textViewWithTag = (TextView)viewWithTag;
             textViewWithTag.setText(text);
@@ -29,5 +28,4 @@ public class ViewGroupWrapper implements TextSettable,
     public void setAlpha(float alpha){
         group.setAlpha(alpha);
     }
-
 }

@@ -1,8 +1,8 @@
 package dotbig.barebonesblackjack;
 
 public interface Card extends Stringable {
-    String getSuit();
-    String getRank();
+    Suit getSuit();
+    Rank getRank();
     boolean isFaceUp();
     void flip(boolean faceUp);
 }
