@@ -18,6 +18,10 @@ public abstract class HandBase implements Hand {
         } else return null;
     }
 
+    public List<BlackjackCard> getCards(){
+        return cards;
+    }
+
     public void bust(){
         bust = true;
     }

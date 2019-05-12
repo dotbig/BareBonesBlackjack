@@ -12,8 +12,16 @@ public class HandDisplayGroup implements AlphaSettable, VisibilitySettable, Text
         this.betDisplay = betDisplay;
     }
 
-    public ConstraintLayout getCardDisplay(){
+    ConstraintLayout getCardDisplay(){
         return cardDisplay;
+    }
+
+    TextView getBetDisplay(){
+        return betDisplay;
+    }
+
+    public void setClickable(boolean enabled){
+        cardDisplay.setClickable(enabled);
     }
 
     public void setAlpha(float alpha){
