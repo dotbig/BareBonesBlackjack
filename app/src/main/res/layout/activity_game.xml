@@ -4,8 +4,205 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:parentActivityName=".MainActivity"
     tools:context=".GameActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cardInspector"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:animateLayoutChanges="false"
+        android:clickable="true"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/buttonBars"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/dealerCards"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_weight="0.5"
+        android:animateLayoutChanges="true"
+        android:clickable="true"
+        android:tag="dealer"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toTopOf="@+id/guideMidPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideMidPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:tag="midpoint"
+        app:layout_constraintGuide_percent="0.35" />
+
+    <LinearLayout
+        android:id="@+id/handDisplays"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="0.5"
+        android:animateLayoutChanges="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:tag="player"
+        app:layout_constraintBottom_toTopOf="@+id/guideTopOfBets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideMidPoint">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="true"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="true"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="true"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="true"
+            android:clickable="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideTopOfBets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:tag="betpoint"
+        app:layout_constraintGuide_percent="0.7" />
+
+    <LinearLayout
+        android:id="@+id/betDisplays"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:animateLayoutChanges="false"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:tag="bets"
+        app:layout_constraintBottom_toTopOf="@+id/guideTopOfButtons"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideTopOfBets">
+
+        <TextView
+            android:id="@+id/betDisplay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.25"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="bet1" />
+
+        <TextView
+            android:id="@+id/betDisplay2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.25"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="bet2" />
+
+        <TextView
+            android:id="@+id/betDisplay3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.25"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="bet3" />
+
+        <TextView
+            android:id="@+id/betDisplay4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="0.25"
+            android:autoSizeTextType="uniform"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="bet4" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/remainingLayout"
@@ -73,7 +270,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="@+id/guideMidPoint"
+        app:layout_constraintBottom_toTopOf="@id/guideMidPoint"
         app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
@@ -101,194 +298,16 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:layout_weight=".7"
         android:gravity="bottom"
         android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/guideMidPoint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/dealerCards"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:animateLayoutChanges="true"
-        app:layout_constraintBottom_toTopOf="@+id/guideMidPoint"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <android.support.constraint.Guideline
-        android:id="@+id/guideMidPoint"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.36" />
-
-    <LinearLayout
-        android:id="@+id/handDisplays"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:animateLayoutChanges="true"
-        android:baselineAligned="false"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guideTopOfBets"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideMidPoint">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/cardDisplay1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:animateLayoutChanges="true"
-            android:tag="cardi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/cardDisplay2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:animateLayoutChanges="true"
-            android:tag="cardi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/cardDisplay3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:animateLayoutChanges="true"
-            android:tag="cardi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/cardDisplay4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.25"
-            android:animateLayoutChanges="true"
-            android:tag="cardi"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
-    </LinearLayout>
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideTopOfBets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.72" />
-
-    <LinearLayout
-        android:id="@+id/betDisplays"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:animateLayoutChanges="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/guiddeTopOfButtons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideTopOfBets">
-
-        <TextView
-            android:id="@+id/betDisplay1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.25"
-            android:autoSizeStepGranularity="2dp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="bet1" />
-
-        <TextView
-            android:id="@+id/betDisplay2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.25"
-            android:autoSizeStepGranularity="2dp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="bet2" />
-
-        <TextView
-            android:id="@+id/betDisplay3"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.25"
-            android:autoSizeStepGranularity="2dp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="bet3" />
-
-        <TextView
-            android:id="@+id/betDisplay4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="0.25"
-            android:autoSizeStepGranularity="2dp"
-            android:autoSizeTextType="uniform"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:text="bet4" />
-    </LinearLayout>
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guiddeTopOfButtons"
+        android:id="@+id/guideTopOfButtons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -307,7 +326,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guiddeTopOfButtons">
+        app:layout_constraintTop_toTopOf="@+id/guideTopOfButtons">
 
         <LinearLayout
             android:id="@+id/barPlay"
