@@ -1,5 +1,9 @@
 package dotbig.barebonesblackjack;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.LayoutTransition;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
@@ -26,10 +30,13 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private enum Result{
         LOSS, PUSH, WIN, NATURAL
     }
-    final boolean ACTIVE = true;
-    final boolean INACTIVE = false;
-    final boolean PLAYER = true;
-    final boolean DEALER = false;
+    private final boolean ACTIVE = true;
+    private final boolean INACTIVE = false;
+    private final boolean PLAYER = true;
+    private final boolean DEALER = false;
+
+    private boolean acted = false;
+    private boolean inspecting = false;
 
     //buttons
     private Button hitButton;
@@ -80,9 +87,14 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private int dealerHandDisplayHeight;
     private int totalHandDisplayWidth;
     private int totalHandDisplayHeight;
+    private int inspectorDisplayWidth;
+    private int inspectorDisplayHeight;
 
     private ConstraintLayout dealerCards;
+    private LinearLayout playerCards;
     private List<HandDisplayGroup> handDisplays;
+    private LinearLayout betParent;
+    private ConstraintLayout inspector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +155,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         insuranceButton.setOnClickListener(this);
         surrenderButton.setOnClickListener(this);
 
+
         //button bar containers
         betBar = findViewById(R.id.barBets);
         contextBar = findViewById(R.id.barContextuals);
@@ -151,20 +164,27 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
         //dealer hand information
         dealerCards = findViewById(R.id.dealerCards);
+        dealerCards.setOnClickListener(this);
 
         bankDisplay = new InfoDisplayGroup((LinearLayout)findViewById(R.id.bankLayout));
         cardsRemainingDisplay = new InfoDisplayGroup((LinearLayout)findViewById(R.id.remainingLayout));
         insuranceDisplay = new InfoDisplayGroup((LinearLayout)findViewById(R.id.insuranceLayout));
 
-        initialiseHandDisplays();
+        inspector = findViewById(R.id.cardInspector);
+        betParent = findViewById(R.id.betDisplays);
+
         setTotalHandDisplayDimensions();
         setTotalDealerDisplayDimensions();
+        setInspectorDisplayDimensions();
+
+        inspector.setOnClickListener(this);
+
+        initialiseHandDisplays();
+
 
         eventLog = findViewById(R.id.textviewEventLog);
 
         updateBetButtonText();
-        //Button buttonTest = findViewById(R.id.buttonTest);
-        //buttonTest.setOnClickListener(this);
     }
 
     private void initialiseBetValues(int betValue1, int betValue2, int betValue3) {
@@ -205,19 +225,42 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             public void run() {
                 dealerHandDisplayWidth = dealerCards.getWidth();
                 dealerHandDisplayHeight = dealerCards.getHeight();
+                out.println("DHW" +dealerHandDisplayWidth);
+
+            }
+        });
+    }
+
+    private void setInspectorDisplayDimensions(){
+        inspector.post(new Runnable() {
+            @Override
+            public void run() {
+                inspectorDisplayHeight = inspector.getHeight();
+                inspectorDisplayWidth = inspector.getWidth();
+                out.println("inspector: "+inspectorDisplayWidth + " " + inspectorDisplayHeight);
+
+                hide(inspector);
             }
         });
     }
 
     private void initialiseHandDisplays(){
+
+        playerCards = findViewById(R.id.handDisplays);
+
         ConstraintLayout cardDisplay1 = findViewById(R.id.cardDisplay1);
         ConstraintLayout cardDisplay2 = findViewById(R.id.cardDisplay2);
         ConstraintLayout cardDisplay3 = findViewById(R.id.cardDisplay3);
         ConstraintLayout cardDisplay4 = findViewById(R.id.cardDisplay4);
-        TextView betDisplay1 = findViewById(R.id.betDisplay1);
-        TextView betDisplay2 = findViewById(R.id.betDisplay2);
-        TextView betDisplay3 = findViewById(R.id.betDisplay3);
-        TextView betDisplay4 = findViewById(R.id.betDisplay4);
+        final TextView betDisplay1 = findViewById(R.id.betDisplay1);
+        final TextView betDisplay2 = findViewById(R.id.betDisplay2);
+        final TextView betDisplay3 = findViewById(R.id.betDisplay3);
+        final TextView betDisplay4 = findViewById(R.id.betDisplay4);
+
+        cardDisplay1.setOnClickListener(this);
+        cardDisplay2.setOnClickListener(this);
+        cardDisplay3.setOnClickListener(this);
+        cardDisplay4.setOnClickListener(this);
 
         handDisplays = new ArrayList<>();
         handDisplays.add(new HandDisplayGroup(cardDisplay1, betDisplay1));
@@ -231,12 +274,12 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     public void onClick(View v){
         switch(v.getId()){
             case (R.id.buttonHit):
-                disableFirstTurnOptions();
+                disableOptions();
                 hitPlayer(currentPlayerHand);
                 break;
 
             case (R.id.buttonStay):
-                disableFirstTurnOptions();
+                disableOptions();
                 stay(currentPlayerHand);
                 break;
 
@@ -256,12 +299,12 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 break;
 
             case (R.id.buttonDoubleDown):
-                disableFirstTurnOptions();
+                disableOptions();
                 doubleDown(currentPlayerHand);
                 break;
 
             case (R.id.buttonSplit):
-                disableFirstTurnOptions();
+                disableOptions();
                 split(currentPlayerHand);
                 break;
 
@@ -277,8 +320,24 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
                 surrender(currentPlayerHand);
                 break;
 
-            //case (R.id.buttonTest):
-            //    break;
+            case (R.id.dealerCards):
+                inspectHand(-1);
+                break;
+            case (R.id.cardDisplay1):
+                inspectHand(0);
+                break;
+            case (R.id.cardDisplay2):
+                inspectHand(1);
+                break;
+            case (R.id.cardDisplay3):
+                inspectHand(2);
+                break;
+            case (R.id.cardDisplay4):
+                inspectHand(3);
+                break;
+            case (R.id.cardInspector):
+                uninspect();
+                break;
         }
     }
 
@@ -307,11 +366,11 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return newCardView;
     }
 
-    private int calculateIdealCardWidth(ConstraintLayout group, boolean player){
-        /*
-        ideally, cards take up the entire width of the container.
-        we want to show 15% of the card beneath, to see it's rank.
-        this means marginSize = 0.15 * cardWidth
+    /*
+        stack of cards should take up as much of its container as possible while not exceeding the boundaries.
+        marginProportion refers to the percentage of the card beneath we'd like to have visible
+        if we want to show 18% of the card beneath, then marginProportion = 0.18
+            marginSize = marginProportion * cardWidth
 
         the ideal card size is found by
             idealWidth = parentWidth - numberOfCards * marginSize
@@ -322,21 +381,22 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         solving for idealWidth gives us
             idealWidth = parentSize/((marginProportion * numberOfCards) + 1)
          */
-
-        int children = group.getChildCount();
-
+    private int calculateCardWidth(ConstraintLayout group, boolean player){
         int hands = playerHands.size();
         int parentWidth;
-        if (!player){
-            parentWidth = dealerHandDisplayWidth / 2;
+        if(inspecting){
+            parentWidth = inspectorDisplayWidth;
+        } else if (!player){
+            parentWidth = dealerHandDisplayWidth;
         } else {
             if (hands == 1){
-                parentWidth = totalHandDisplayWidth / 2;
+                parentWidth = totalHandDisplayWidth;
             } else {
                 parentWidth = totalHandDisplayWidth / hands;
             }
         }
 
+        int children = group.getChildCount();
         int idealWidth;
         if (children > 1){
             idealWidth = (int)(parentWidth/(desiredMargin*children+1));
@@ -346,30 +406,30 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         return idealWidth;
     }
 
-    private int calculateIdealCardHeight(ConstraintLayout group, boolean player){
-        int children = group.getChildCount();
-
+    private int calculateCardHeight(ConstraintLayout group, boolean player){
         int parentHeight;
-        if (player){
-            parentHeight = totalHandDisplayHeight;
-        } else {
+        if (inspecting){
+            parentHeight = inspectorDisplayHeight;
+        } else if (!player){
             parentHeight = dealerHandDisplayHeight;
+        } else {
+            parentHeight = totalHandDisplayHeight;
         }
 
+        int children = group.getChildCount();
         int idealHeight;
         if (children > 1){
             idealHeight = (int)(parentHeight/(desiredMargin*children+1));
         } else {
             idealHeight = parentHeight;
         }
-
         return idealHeight;
     }
 
     private void resizeCards(ConstraintLayout group, boolean player){
         int children = group.getChildCount();
-        int idealWidth = calculateIdealCardWidth(group, player);
-        int idealHeight = calculateIdealCardHeight(group, player);
+        int idealWidth = calculateCardWidth(group, player);
+        int idealHeight = calculateCardHeight(group, player);
         for (int i=0; i<children; i++){
             ImageView child = (ImageView)group.getChildAt(i);
             child.setMaxWidth(idealWidth);
@@ -381,8 +441,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         ConstraintSet constraints = new ConstraintSet();
         constraints.clone(group);
 
-        int cardWidth = calculateIdealCardWidth(group, player);
-        int cardHeight = calculateIdealCardHeight(group, player);
+        int cardWidth = calculateCardWidth(group, player);
+        int cardHeight = calculateCardHeight(group, player);
         int marginLeft = (int)(cardWidth*desiredMargin);
         int marginBottom = (int)(cardHeight*desiredMargin);
 
@@ -392,17 +452,20 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             int elder;
             if (i == 0){
                 //offset the first card depending on how many cards there are,
-                //ensures the whole stack remains mostly centered
-                int offset = children*marginLeft;
+                //ensures the whole stack remains centered
+                int offsetRight = (children-1)*marginLeft;
+                int offsetTop = (children-1)*marginBottom;
 
                 current = group.getChildAt(0).getId();
                 elder = ConstraintSet.PARENT_ID;
                 constraints.connect(current, ConstraintSet.LEFT,
                         elder, ConstraintSet.LEFT);
                 constraints.connect(current, ConstraintSet.RIGHT,
-                        elder, ConstraintSet.RIGHT, offset);
+                        elder, ConstraintSet.RIGHT, offsetRight);
                 constraints.connect(current, ConstraintSet.BOTTOM,
                         elder, ConstraintSet.BOTTOM);
+                constraints.connect(current, ConstraintSet.TOP,
+                        elder, ConstraintSet.TOP, offsetTop);
             } else {
                 current = group.getChildAt(i).getId();
                 elder = group.getChildAt(i-1).getId();
@@ -446,7 +509,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         group.addView(newCardView);
         resizeCards(group, player);
         setCardConstraints(group, player);
-        newCardView.setAlpha(0.0f);
         show(newCardView);
     }
 
@@ -476,23 +538,53 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         }
     }
 
-    //TODO: touch hand to enlarge
+    //TODO: inspect in a different larger ConstraintLayout?
     //hide all other hands, colour in selected hand, resize + remargin
     private void inspectHand(int index){
-        //for hands
-        //if handindex != index
-        //  hide
-        //else
-        //  colourIn
-        //  resize hand
-        //  remargin hand
+        inspecting = true;
+
+        toggleGameButtons(false);
+        disableOptions();
+
+        hide(dealerCards);
+        hide(playerCards);
+        hide(betParent);
+
+        if (index >= 0){
+            for (Hand h : playerHands){
+                if (getHandIndex(h) == index) {
+                    for (BlackjackCard c : h.getCards()) {
+                        addCardToDisplay(inspector, c, false);
+                    }
+                }
+            }
+        } else {
+            for (BlackjackCard c : dealerHand.getCards()){
+                addCardToDisplay(inspector, c, false);
+            }
+        }
+        show(inspector);
+        inspector.bringToFront();
+        inspector.setClickable(true);
     }
 
     private void uninspect(){
-        //showactivehands
-        //focusactivehand
-        //resize hands
-        //remargin hands
+        inspecting = false;
+
+        optionsCheck();
+        if (currentPlayerHand == null){
+            toggleGameButtons(false);
+        } else {
+            toggleGameButtons(true);
+        }
+
+        inspector.setClickable(false);
+        hide(inspector);
+        emptyView(inspector);
+
+        show(dealerCards);
+        show(playerCards);
+        show(betParent);
     }
 
     private void showActiveHandGroups(){
@@ -507,11 +599,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
             int currentHandIndex = playerHands.indexOf(hand);
             for (int i = 0; i< handDisplays.size(); i++){
                 if (currentHandIndex == i){
-                    out.println("coloring group "+i);
                     colourIn(handDisplays.get(i));
-
                 } else {
-                    out.println("uncoloring group "+i);
                     greyOut(handDisplays.get(i));
                 }
             }
@@ -586,9 +675,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void emptyView(ConstraintLayout group){
-        hide(group);
         group.removeAllViews();
-        show(group);
     }
 
     private void popCard(Hand hand){
@@ -657,7 +744,6 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     //use it whenever we need another hand from stay bust etc
     private void tryNextPlayerHand(PlayerSpecific hand){
         PlayerSpecific nextHand = getNextHand(hand, ACTIVE);
-        //updatePlayerInformation(nextHand);
         focusActiveHand(nextHand);
         if (nextHand == null){
             dealerTurn(natural(hand));
@@ -691,27 +777,57 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     //dealer draws cards until hard 17
     private void completeDealerHand(){
-        while ((dealerHand.value() < 17 && dealerHand.value() != -1) || dealerHand.softSeventeen()) {
-            hitDealer(dealerHand);
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (!dealerShouldDraw()){
+                    if (insuranceTaken()){
+                        resolveInsurance();
+                    }
+                    evaluateAllResults();
+                } else {
+                    hitDealer(dealerHand);
+                    handler.postDelayed(this, 350);
+                }
+            }
+        };
+        handler.postDelayed(runnable, 350);
+    }
+
+    private boolean dealerShouldDraw(){
+        int value = dealerHand.value();
+        boolean soft = dealerHand.softSeventeen();
+
+        return (value < 17 && value != -1) || soft;
+    }
+
+    private void toggleInspection(boolean enabled){
+        dealerCards.setClickable(enabled);
+        for (HandDisplayGroup display : handDisplays){
+            display.setClickable(enabled);
         }
     }
 
     private void dealerTurn(boolean playerNatural){
+        toggleInspection(false);
+        toggleGameButtons(false);
+
         //decide whether or not to reveal the face down card
-        if (shouldReveal(playerNatural)){
+        if (shouldReveal(playerNatural)) {
             revealHoleCard();
         }
+
         //if the player has hands still in play and doesn't have natural, dealer draws til 17
-        if (playerHasLiveHands()) {
-            if (!playerNatural) {
-                completeDealerHand();
+        if (playerHasLiveHands() && !playerNatural) {
+            completeDealerHand();
+        } else {
+            if (insuranceTaken()) {
+                resolveInsurance();
             }
+            evaluateAllResults();
         }
-        //if player has taken insurance, resolve the outcome of that bet
-        if (insuranceTaken()) {
-            resolveInsurance();
-        }
-        evaluateAllResults();
+
     }
 
     private boolean playerHasLiveHands(){
@@ -727,14 +843,19 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     private void revealHoleCard(){
         dealerHand.reveal();
         flipCard();
-        //redrawHand(dealerHand);
     }
 
     //TODO: make it smoother with animation
     private void flipCard(){
         final ImageView hole = (ImageView)dealerCards.getChildAt(0);
-
-        hole.setImageResource(CardImage.findImage(dealerHand.getHoleCard(), getApplicationContext()));
+        hole.animate().alpha(0.0f).setDuration(125).setListener(new AnimatorListenerAdapter() {
+               @Override
+               public void onAnimationEnd(Animator animation) {
+                   super.onAnimationEnd(animation);
+                   hole.setImageResource(CardImage.findImage(dealerHand.getHoleCard(), getApplicationContext()));
+                   hole.animate().alpha(1.0f).setDuration(125).setListener(null);
+               }
+           });
     }
 
     private boolean possibleDealerNatural(){
@@ -891,11 +1012,12 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void hitPlayer(PlayerSpecific hand) {
+        acted = true;
         hit(hand);
         if (busted(hand)){
             bust(hand);
         } else if (twentyOne(hand)){
-            stay(hand);
+            forcedStay(hand);
         }
     }
 
@@ -912,6 +1034,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void play(){
+        uninspect();
+        acted = false;
         initialiseHands();
         updateBankDisplay();
         tryToggleBetButtons(false);
@@ -928,20 +1052,44 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         deal();
         //dealTest();
 
-        showGameButtons(true);
         updateHandStatusBet(currentPlayerHand);
 
-        firstTurnOptionsCheck();
+        optionsCheck();
         if (natural(currentPlayerHand)){
             if (allowEvenMoney(currentPlayerHand)) {
+                showGameButtons(true);
                 offerEvenMoney(currentPlayerHand);
             } else {
-                dealerTurn(true);
+                //dealerTurn(true);
+                forcedStay(currentPlayerHand);
             }
         } else {
+            showGameButtons(true);
             toggleGameButtons(true);
         }
         //dont put things here
+    }
+
+    private void forcedStay(final PlayerSpecific hand){
+        Handler handler = new Handler();
+        toggleGameButtons(false);
+
+        if (natural(hand)){
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    dealerTurn(true);
+                }
+            }, 150);
+        } else {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    stay(hand);
+                    //toggleGameButtons(true);
+                }
+            }, 150);
+        }
     }
 
     private void increaseBet(int amount){
@@ -970,6 +1118,8 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void endRound(){
+        toggleInspection(true);
+
         resetBet();
         insurance = 0;
         if (shoe.penetrationCheck()) {
@@ -984,6 +1134,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     //TODO: if split results in blackjack, ensure hand gets unfocused
     private void split(PlayerSpecific hand){
+        acted = true;
         PlayerSpecific master = hand;
         PlayerSpecific branch = splitHand(master);
         decreaseBank(branch.getBet());
@@ -1029,6 +1180,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     }
 
     private void doubleDown(PlayerSpecific hand){
+        acted = true;
         int bet = hand.getBet();
         bank -= bet;
         hand.increaseBet(bet);
@@ -1039,11 +1191,12 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         if (busted(hand)){
             bust(hand);
         } else {
-            stay(hand);
+            forcedStay(hand);
         }
     }
 
     private void surrender(PlayerSpecific hand){
+        acted = true;
         int recoup = hand.getBet()/2;
         increaseBank(recoup);
         log("Surrendered\nReturned $"+Integer.toString(recoup) +"\n");
@@ -1054,20 +1207,35 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         endRound();
     }
 
-    private void firstTurnOptionsCheck(){
-        toggleButton(doubleDownButton, allowDoubleDown(currentPlayerHand));
-        toggleButton(splitButton, allowSplit(currentPlayerHand));
-        toggleButton(insuranceButton, allowInsurance(currentPlayerHand));
-        toggleButton(surrenderButton, true);
+    private boolean allowSurrender(){
+        if (acted) {
+            return false;
+        } else return true;
     }
 
-    private void disableFirstTurnOptions(){
+    private void optionsCheck(){
+        if (currentPlayerHand != null){
+            if (allowEvenMoney(currentPlayerHand)){
+                offerEvenMoney(currentPlayerHand);
+            } else {
+                toggleButton(doubleDownButton, allowDoubleDown(currentPlayerHand));
+                toggleButton(splitButton, allowSplit(currentPlayerHand));
+                toggleButton(insuranceButton, allowInsurance(currentPlayerHand));
+                toggleButton(surrenderButton, allowSurrender());
+            }
+        }
+    }
+
+    private void disableOptions(){
         toggleButton(doubleDownButton, false);
         toggleButton(splitButton, false);
         toggleButton(insuranceButton, false);
         toggleButton(surrenderButton, false);
     }
     private boolean allowDoubleDown(PlayerSpecific hand){
+        if (acted) {
+            return false;
+        }
         return bank >= hand.getBet();
     }
 
@@ -1077,6 +1245,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
 
     private void offerEvenMoney(PlayerSpecific hand){
         toggleButton(hitButton, false);
+        toggleButton(stayButton, true);
         toggleButton(doubleDownButton, false);
         toggleButton(insuranceButton, allowInsurance(hand));
         toggleButton(surrenderButton, false);
@@ -1085,6 +1254,9 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
     //TODO: check logic
     private boolean allowInsurance(PlayerSpecific hand){
         int max = hand.getBet()/2;
+        if (acted) {
+            return false;
+        }
         if (count(hand) > 2) {
             return false;
         }
@@ -1118,7 +1290,7 @@ public class GameActivity extends AppCompatActivity implements OnClickListener {
         if (net > 0){
             setText(insuranceDisplay, String.format(Locale.ENGLISH, "+$%d", net));
         } else {
-            setText(insuranceDisplay, String.format(Locale.ENGLISH, "$%d", net));
+            setText(insuranceDisplay, String.format(Locale.ENGLISH, "-$%d", (Math.abs(net))));
         }
     }
 
