@@ -2,10 +2,9 @@
 <resources>
     <string-array
         name="shoe_sizes">
-        <item>2 decks</item>
-        <item>4 decks</item>
-        <item>6 decks</item>
-        <item>8 decks</item>
+        <item>4 DECKS</item>
+        <item>6 DECKS</item>
+        <item>8 DECKS</item>
     </string-array>
     <string-array
         name="penetration_values">
