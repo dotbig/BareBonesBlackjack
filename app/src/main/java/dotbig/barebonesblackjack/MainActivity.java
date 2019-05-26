@@ -71,15 +71,12 @@ public class MainActivity extends AppCompatActivity implements
     private void selectShoeSize(int which){
         switch(which){
             case(0):
-                setShoeSize(2);
-                break;
-            case(1):
                 setShoeSize(4);
                 break;
-            case(2):
+            case(1):
                 setShoeSize(6);
                 break;
-            case(3):
+            case(2):
                 setShoeSize(8);
                 break;
         }
