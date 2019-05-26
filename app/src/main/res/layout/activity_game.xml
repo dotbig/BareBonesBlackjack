@@ -19,12 +19,414 @@
 
     </android.support.constraint.ConstraintLayout>
 
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cardInspector"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:animateLayoutChanges="false"
+        android:clickable="true"
+        app:layout_constrainedHeight="true"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </android.support.constraint.ConstraintLayout>
+
     <android.support.constraint.Guideline
         android:id="@+id/rulesTop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.28" />
+        app:layout_constraintGuide_percent="0.32" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/controlsHelp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/betDisplays"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rulesBottom">
+
+        <ImageView
+            android:id="@+id/dotDouble"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:alpha="0"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/helpBottom"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="@+id/helpRight"
+            app:layout_constraintWidth_percent="0.1"
+            app:srcCompat="@drawable/adoty" />
+
+        <ImageView
+            android:id="@+id/arrowSplit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:adjustViewBounds="true"
+            android:alpha="0"
+            android:scaleType="fitCenter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/helpRight"
+            app:layout_constraintTop_toTopOf="@id/helpTop"
+            app:srcCompat="@drawable/arrowrighty" />
+
+        <ImageView
+            android:id="@+id/arrowStay"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:alpha="0"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/helpLeft"
+            app:layout_constraintStart_toStartOf="@+id/helpLeftMid"
+            app:layout_constraintTop_toTopOf="@+id/helpTop"
+            app:srcCompat="@drawable/arrowupy" />
+
+        <ImageView
+            android:id="@+id/arrowHit"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:alpha="0"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/helpBottom"
+            app:layout_constraintEnd_toStartOf="@id/helpLeftMid"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arrowdowny" />
+
+        <TextView
+            android:id="@+id/labelStay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="bottom|center"
+            android:text="STAY"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toTopOf="@+id/helpTop"
+            app:layout_constraintEnd_toStartOf="@+id/helpLeft"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="@+id/helpLeftMid" />
+
+        <TextView
+            android:id="@+id/labelSplit"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="bottom|center"
+            android:text="SPLIT"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toTopOf="@+id/helpTop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="@+id/helpRight" />
+
+        <TextView
+            android:id="@+id/labelHit"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|top"
+            android:text="HIT"
+            android:textColor="#E2D033"
+            app:layout_constraintEnd_toStartOf="@+id/helpLeftMid"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/helpBottom" />
+
+        <TextView
+            android:id="@+id/labelDouble"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|top"
+            android:text="DOUBLE"
+            android:textColor="#E2D033"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="@+id/helpRight"
+            app:layout_constraintTop_toTopOf="@+id/helpBottom" />
+
+        <TextView
+            android:id="@+id/labelHold"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|top"
+            android:text="(HOLD)"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toTopOf="@+id/dotDouble"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintStart_toStartOf="@+id/helpRight" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.26" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpLeftMid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.13" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.74" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/helpRightMid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.87" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/betHelp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/topOfInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/betDisplays">
+
+        <TextView
+            android:id="@+id/tapBet"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|end"
+            android:lines="2"
+            android:text="TAP TO\nINCREASE BET"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/betBroke"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|end"
+            android:lines="2"
+            android:text="NO FUNDS!\nGO HOME!"
+            android:textColor="#E2D033"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/guidelineLeft"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/holdBet"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|start"
+            android:lines="2"
+            android:text="HOLD TO\nRESET BET"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toStartOf="@+id/guidelineRight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/labelSurrender"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:alpha="0"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|start"
+            android:lines="1"
+            android:text="(HOLD) SURRENDER"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toStartOf="@+id/guidelineRight"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guidelineRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.63" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guidelineLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.37" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/handHelp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toBottomOf="@id/guideTopOfBets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/rulesBottom">
+
+        <ImageView
+            android:id="@+id/handHighlighter"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/card_highlighter" />
+
+        <TextView
+            android:id="@+id/tapHand"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|end"
+            android:lines="1"
+            android:text="TAP"
+            android:textColor="#E2D033"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/handHighlighter"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tapHand2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|start"
+            android:lines="1"
+            android:text="ME"
+            android:textColor="#E2D033"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.2"
+            app:layout_constraintStart_toEndOf="@+id/handHighlighter"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/rules"
@@ -40,7 +442,6 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
-            android:layout_marginTop="4dp"
             android:layout_marginEnd="4dp"
             android:autoSizeTextType="uniform"
             android:fontFamily="sans-serif-condensed"
@@ -58,7 +459,6 @@
             android:layout_height="0dp"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
-            android:layout_marginBottom="4dp"
             android:autoSizeTextType="uniform"
             android:fontFamily="sans-serif-condensed"
             android:gravity="center"
@@ -74,14 +474,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.33" />
+            app:layout_constraintGuide_percent="0.32" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guidelineInsuranceBottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.67" />
+            app:layout_constraintGuide_percent="0.68" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guidelineRulesInsuranceLeft"
@@ -149,6 +549,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
+            android:animateLayoutChanges="false"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guidelineRulesInsuranceRight"
@@ -165,22 +566,62 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/betting_circle_insurance" />
 
+            <ImageView
+                android:id="@+id/insuranceBackgroundHighlighted"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0"
+                android:padding="2dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_insurance_highlighted" />
+
+            <ImageView
+                android:id="@+id/insuranceBackgroundWin"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0"
+                android:padding="2dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_insurance_win" />
+
+            <ImageView
+                android:id="@+id/insuranceBackgroundLoss"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:alpha="0"
+                android:padding="2dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_insurance_loss" />
+
             <TextView
                 android:id="@+id/insuranceValue"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_margin="15dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:lines="1"
-                android:padding="20dp"
                 android:tag="text"
                 android:text="bet"
                 android:textAlignment="gravity"
                 android:textSize="30sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/insuranceBackground"
+                app:layout_constraintEnd_toEndOf="@id/insuranceBackground"
+                app:layout_constraintStart_toStartOf="@id/insuranceBackground"
+                app:layout_constraintTop_toTopOf="@id/insuranceBackground" />
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
@@ -190,269 +631,247 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.42" />
-
-    <LinearLayout
-        android:id="@+id/buttonBars"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        android:weightSum="1"
-        app:layout_constraintBottom_toTopOf="@+id/bottomOfButtons"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideTopOfButtons">
-
-        <LinearLayout
-            android:id="@+id/barPlay"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:visibility="visible">
-
-            <Button
-                android:id="@+id/buttonPlay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Play" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/barHitStay"
-            style="?attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/buttonHit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Hit" />
-
-            <Button
-                android:id="@+id/buttonStay"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Stay" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/barBets"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/buttonBet1"
-                style="@android:style/Widget.Material.Button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="bet1"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/buttonBet2"
-                style="@android:style/Widget.Material.Button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="bet2"
-                android:textColor="@android:color/black" />
-
-            <Button
-                android:id="@+id/buttonBet3"
-                style="@android:style/Widget.Material.Button"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="bet3"
-                android:textColor="@android:color/black" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/barContextuals"
-            style="?attr/buttonBarStyle"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight=".5"
-            android:orientation="horizontal"
-            android:visibility="gone">
-
-            <Button
-                android:id="@+id/buttonDoubleDown"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Double Down"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/buttonSplit"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Split"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/buttonInsurance"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Insurance"
-                android:textSize="10sp" />
-
-            <Button
-                android:id="@+id/buttonSurrender"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="Surrender"
-                android:textSize="10sp" />
-
-        </LinearLayout>
-
-    </LinearLayout>
+        app:layout_constraintGuide_percent="0.48" />
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/infoBar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/bottomOfButtons">
-
-        <LinearLayout
-            android:id="@+id/bankLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="4dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline11"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/bankLabel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:autoSizeTextType="uniform"
-                android:gravity="center_vertical|end"
-                android:lines="1"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="FUNDS"
-                android:textAlignment="gravity"
-                android:textSize="30sp" />
-
-            <TextView
-                android:id="@+id/bankValue"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:autoSizeTextType="uniform"
-                android:gravity="start|center_vertical"
-                android:lines="1"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:tag="text"
-                android:text="funds"
-                android:textAlignment="gravity"
-                android:textSize="30sp"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </LinearLayout>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <LinearLayout
-            android:id="@+id/remainingLayout"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="4dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline11"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/remainingValue"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:autoSizeTextType="uniform"
-                android:gravity="center_vertical|end"
-                android:maxLines="1"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:tag="text"
-                android:text="remaining"
-                android:textAlignment="gravity"
-                android:textSize="30dp" />
-
-            <TextView
-                android:id="@+id/remainingLabel"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:autoSizeTextType="uniform"
-                android:gravity="start|center_vertical"
-                android:maxLines="1"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:text="CARDS"
-                android:textAlignment="gravity"
-                android:textSize="30sp" />
-
-        </LinearLayout>
-    </android.support.constraint.ConstraintLayout>
-
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/cardInspector"
+        android:id="@+id/dealerCards"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:animateLayoutChanges="false"
-        android:clickable="true"
+        android:clickable="false"
+        android:tag="dealer"
         app:layout_constrainedHeight="true"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/buttonBars"
+        app:layout_constraintBottom_toTopOf="@+id/rulesTop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/topOfInfo">
+
+        <View
+            android:id="@+id/infoBackdrop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#907365"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/infoBorder"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="#7C5C4B"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/bankLabel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center_vertical|end"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="FUNDS"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bankValue"
+            app:layout_constraintTop_toBottomOf="@id/infoBorder"
+            app:layout_constraintWidth_percent="0.2" />
+
+        <TextView
+            android:id="@+id/bankValue"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|start"
+            android:lines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:tag="text"
+            android:text="funds"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/infoBorder"
+            app:layout_constraintWidth_percent="0.15" />
+
+        <TextView
+            android:id="@+id/remainingValue"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center|end"
+            android:maxLines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:tag="text"
+            android:text="remaining"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/infoBorder"
+            app:layout_constraintWidth_percent="0.15" />
+
+        <TextView
+            android:id="@+id/remainingLabel"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="start|center_vertical"
+            android:maxLines="1"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:text="CARDS"
+            android:textAlignment="gravity"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/remainingValue"
+            app:layout_constraintTop_toBottomOf="@id/infoBorder"
+            app:layout_constraintWidth_percent="0.2" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/handDisplays"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:animateLayoutChanges="false"
+        android:clickable="false"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal"
+        android:tag="player"
+        app:layout_constraintBottom_toTopOf="@+id/guideTopOfBets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rulesBottom">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="false"
+            android:clickable="false"
+            app:layout_constrainedHeight="false"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="false"
+            android:clickable="false"
+            app:layout_constrainedHeight="false">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="false"
+            android:clickable="false"
+            app:layout_constrainedHeight="false">
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/cardDisplay4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="false"
+            android:clickable="false"
+            app:layout_constrainedHeight="false" />
+
+    </LinearLayout>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideTopOfBets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/clearHelp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:alpha="0"
+        app:layout_constraintBottom_toTopOf="@+id/guideTopOfBets"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rulesBottom">
+
+        <ImageView
+            android:id="@+id/arrowClear"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:alpha="0.95"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/arrowrightybigger" />
+
+        <TextView
+            android:id="@+id/labelClear"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="SWIPE TO CLEAR"
+            app:layout_constraintBottom_toBottomOf="@id/arrowClear"
+            app:layout_constraintEnd_toEndOf="@id/arrowClear"
+            app:layout_constraintStart_toStartOf="@id/arrowClear"
+            app:layout_constraintTop_toTopOf="@id/arrowClear" />
     </android.support.constraint.ConstraintLayout>
 
     <LinearLayout
@@ -461,10 +880,11 @@
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@+id/guideTopOfButtons"
+        app:layout_constraintBottom_toTopOf="@id/topOfInfo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideTopOfBets">
@@ -473,14 +893,15 @@
             android:id="@+id/boxDisplay1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.25">
+            android:layout_weight="0.25"
+            android:animateLayoutChanges="false">
 
             <ImageView
                 android:id="@+id/box1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:padding="2dp"
+                android:padding="3dp"
                 android:scaleType="fitCenter"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="false"
@@ -490,20 +911,73 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/betting_circle" />
 
+            <ImageView
+                android:id="@+id/box1Highlighted"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_highlighted" />
+
+            <ImageView
+                android:id="@+id/box1Win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_win" />
+
+            <ImageView
+                android:id="@+id/box1Loss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_loss" />
+
             <TextView
                 android:id="@+id/betDisplay1"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_margin="15dp"
                 android:layout_weight="0.25"
+                android:autoSizeStepGranularity="1dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:lines="1"
-                android:padding="25dp"
                 android:text="bet1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/box1"
+                app:layout_constraintEnd_toEndOf="@id/box1"
+                app:layout_constraintStart_toStartOf="@id/box1"
+                app:layout_constraintTop_toTopOf="@id/box1" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -517,7 +991,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:padding="2dp"
+                android:padding="3dp"
                 android:scaleType="fitCenter"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="false"
@@ -527,20 +1001,56 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/betting_circle" />
 
+            <ImageView
+                android:id="@+id/box2Loss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_loss" />
+
+            <ImageView
+                android:id="@+id/box2Win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_win" />
+
             <TextView
                 android:id="@+id/betDisplay2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_margin="15dp"
                 android:layout_weight="0.25"
+                android:autoSizeStepGranularity="1dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:lines="1"
-                android:padding="25dp"
                 android:text="bet2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/box2"
+                app:layout_constraintEnd_toEndOf="@id/box2"
+                app:layout_constraintStart_toStartOf="@id/box2"
+                app:layout_constraintTop_toTopOf="@id/box2" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -551,11 +1061,45 @@
             android:layout_weight="0.25">
 
             <ImageView
+                android:id="@+id/box3Win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_win" />
+
+            <ImageView
+                android:id="@+id/box3Loss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_loss" />
+
+            <ImageView
                 android:id="@+id/box3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:padding="2dp"
+                android:padding="3dp"
                 android:scaleType="fitCenter"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="false"
@@ -569,16 +1113,18 @@
                 android:id="@+id/betDisplay3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_margin="15dp"
                 android:layout_weight="0.25"
+                android:autoSizeStepGranularity="1dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:lines="1"
-                android:padding="25dp"
                 android:text="bet3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/box3"
+                app:layout_constraintEnd_toEndOf="@id/box3"
+                app:layout_constraintStart_toStartOf="@id/box3"
+                app:layout_constraintTop_toTopOf="@id/box3" />
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
@@ -588,11 +1134,45 @@
             android:layout_weight="0.25">
 
             <ImageView
+                android:id="@+id/box4Win"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_win" />
+
+            <ImageView
+                android:id="@+id/box4Loss"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:alpha="0"
+                android:padding="3dp"
+                android:scaleType="fitCenter"
+                android:visibility="visible"
+                app:layout_constrainedHeight="true"
+                app:layout_constrainedWidth="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/betting_circle_loss" />
+
+            <ImageView
                 android:id="@+id/box4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:padding="2dp"
+                android:padding="3dp"
                 android:scaleType="fitCenter"
                 app:layout_constrainedHeight="true"
                 app:layout_constrainedWidth="false"
@@ -606,134 +1186,24 @@
                 android:id="@+id/betDisplay4"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
+                android:layout_margin="15dp"
                 android:layout_weight="0.25"
+                android:autoSizeStepGranularity="1dp"
                 android:autoSizeTextType="uniform"
+                android:fontFamily="sans-serif-condensed"
                 android:gravity="center"
                 android:lines="1"
-                android:padding="25dp"
                 android:text="bet4"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintBottom_toBottomOf="@id/box4"
+                app:layout_constraintEnd_toEndOf="@id/box4"
+                app:layout_constraintStart_toStartOf="@id/box4"
+                app:layout_constraintTop_toTopOf="@id/box4" />
         </android.support.constraint.ConstraintLayout>
 
     </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/hands"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/betDisplays"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/dealerCards"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="25dp"
-            android:animateLayoutChanges="false"
-            android:clickable="false"
-            android:tag="dealer"
-            app:layout_constrainedHeight="true"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@+id/handsMidPoint"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.Guideline
-            android:id="@+id/handsMidPoint"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <LinearLayout
-            android:id="@+id/handDisplays"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="25dp"
-            android:layout_marginBottom="5dp"
-            android:animateLayoutChanges="false"
-            android:clickable="false"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:tag="player"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/handsMidPoint">
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cardDisplay1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:animateLayoutChanges="false"
-                android:clickable="false"
-                app:layout_constrainedHeight="false">
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cardDisplay2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:animateLayoutChanges="false"
-                android:clickable="false"
-                app:layout_constrainedHeight="false">
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cardDisplay3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:animateLayoutChanges="false"
-                android:clickable="false"
-                app:layout_constrainedHeight="false">
-
-            </android.support.constraint.ConstraintLayout>
-
-            <android.support.constraint.ConstraintLayout
-                android:id="@+id/cardDisplay4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.25"
-                android:animateLayoutChanges="false"
-                android:clickable="false"
-                app:layout_constrainedHeight="false" />
-
-        </LinearLayout>
-
-    </android.support.constraint.ConstraintLayout>
-
     <android.support.constraint.Guideline
-        android:id="@+id/guideTopOfBets"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.68" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideTopOfButtons"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.8" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/bottomOfButtons"
+        android:id="@+id/topOfInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
