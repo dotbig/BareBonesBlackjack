@@ -1,135 +1,353 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#739B64"
     tools:context=".MainActivity">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/splash"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <View
+            android:id="@+id/titleBackground"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#4F6B44"
+            app:layout_constraintBottom_toTopOf="@id/bottomOfTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/titleBorder"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/bottomOfTitle" />
+
+        <ImageView
+            android:id="@+id/face"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/cardsLeft"
+            app:layout_constraintTop_toTopOf="@+id/cardsTop2"
+            app:srcCompat="@drawable/face_down" />
+
+        <ImageView
+            android:id="@+id/ace"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toTopOf="@+id/cardsBottom"
+            app:layout_constraintEnd_toStartOf="@+id/cardsRight"
+            app:layout_constraintTop_toTopOf="@+id/cardsTop"
+            app:srcCompat="@drawable/ace_spades" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/bottomOfTitle"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.25" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textviewNumberOfDecks"
-                        android:layout_width="200dp"
-                        android:layout_height="40dp"
-                        android:gravity="right|center_vertical"
-                        android:text="Shoe Size: "
-                        android:textSize="24sp" />
-
-                    <Button
-                        android:id="@+id/buttonShoeSize"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:text="Button"
-                        android:textAllCaps="false"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textviewNumberOfDecksDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="How many decks to shuffle together"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center|left"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/textviewPenetration"
-                        android:layout_width="200dp"
-                        android:layout_height="40dp"
-                        android:gravity="right|center_vertical"
-                        android:text="Penetration: "
-                        android:textSize="24sp" />
-
-                    <Button
-                        android:id="@+id/buttonPenetration"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif"
-                        android:text="Button"
-                        android:textAllCaps="false"
-                        android:textSize="20sp" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/textviewPenetrationDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Percentage of cards dealt before reshuffling"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/buttonPlay"
-            android:layout_width="match_parent"
+        <android.support.constraint.Guideline
+            android:id="@+id/cardsTop"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.30" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/cardsTop2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/cardsLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/cardsRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/cardsBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:padding="8dp"
-            android:text="Play!"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="sans-serif-condensed"
+            android:gravity="center"
+            android:lines="2"
+            android:text="BARE BONES\nBLACKJACK"
+            android:textColor="#E2D033"
+            app:layout_constraintBottom_toTopOf="@+id/bottomOfTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
+    </android.support.constraint.ConstraintLayout>
 
     <android.support.constraint.Guideline
-        android:id="@+id/guideline2"
+        android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="201dp" />
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.6" />
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/options"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline"
+        app:layout_constraintVertical_bias="0.0">
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/shoe"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/optionsMid"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/shoeVertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/shoeHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <Button
+                android:id="@+id/buttonShoeSize"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:background="#4F6B44"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Button"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/shoeHorizontal"
+                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintStart_toEndOf="@id/shoeVertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.35" />
+
+            <TextView
+                android:id="@+id/textviewNumberOfDecks"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="right|center_vertical"
+                android:text="Shoe Size: "
+                android:textAllCaps="true"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/shoeHorizontal"
+                app:layout_constraintEnd_toStartOf="@+id/shoeVertical"
+                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textviewNumberOfDecksDescription"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_horizontal"
+                android:text="How many decks to shuffle together"
+                android:textAllCaps="true"
+                android:textColor="#E2D033"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/shoeHorizontal" />
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/optionsTopOfButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/pen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            app:layout_constraintBottom_toTopOf="@+id/optionsTopOfButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/optionsMid">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/penHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/penVertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <TextView
+                android:id="@+id/textviewPenetration"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="right|center_vertical"
+                android:text="Penetration: "
+                android:textAllCaps="true"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toTopOf="@+id/penHorizontal"
+                app:layout_constraintEnd_toEndOf="@id/penVertical"
+                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/buttonPenetration"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:background="#4F6B44"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Button"
+                android:textAllCaps="true"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toTopOf="@+id/penHorizontal"
+                app:layout_constraintHeight_percent="0.45"
+                app:layout_constraintStart_toStartOf="@+id/penVertical"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.35" />
+
+            <TextView
+                android:id="@+id/textviewPenetrationDescription"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:autoSizeStepGranularity="1dp"
+                android:autoSizeTextType="uniform"
+                android:capitalize="none"
+                android:fontFamily="sans-serif-condensed"
+                android:gravity="center_horizontal"
+                android:text="Percentage of cards dealt before reshuffling"
+                android:textAllCaps="true"
+                android:textColor="#E2D033"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/penHorizontal" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.Guideline
+            android:id="@+id/optionsMid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
+
+        <Button
+            android:id="@+id/buttonPlay"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="4dp"
+            android:autoSizeStepGranularity="1dp"
+            android:autoSizeTextType="uniform"
+            android:background="#4F6B44"
+            android:fontFamily="sans-serif-condensed"
+            android:padding="8dp"
+            android:text="Play!"
+            android:textAllCaps="true"
+            android:textColor="#FFFFFF"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/optionsTopOfButton" />
+    </android.support.constraint.ConstraintLayout>
 
 </android.support.constraint.ConstraintLayout>
